@@ -34,43 +34,40 @@ const Home = () => {
               What The Community Said
             </h2>
             <p className="text-lg font-medium text-slate-700 mt-2">
-              People wont take word from you, the need a real reviews
+              People wont take word from you, they need a real reviews
             </p>
             <div className="grid grid-cols-3 items-center gap-4 mt-6 px-10">
               <div className="col-span-1 hover:shadow-2xl transition-all hover:-rotate-6 hover:scale-105 shadow-md w-11/12 text-center rounded flex flex-col p-2">
-                <div className="bg-sky-400 flex items-center justify-center p-6 rounded text-white">
+                <div className="bg-gradient-to-br from-sky-400  to-sky-300 flex items-center justify-center p-6 rounded text-white">
                   <Icon icon="ant-design:field-time-outlined" width={80} />
                 </div>
                 <h5 className="text-lg font-bold text-slate-900 mt-2">
                   Make yours within a minute
                 </h5>
                 <p className="text-slate-700 text-sm leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolorem, molestias.
+                  Dont worry, we make all the process so easily and quick.
                 </p>
               </div>
               <div className="col-span-1 hover:shadow-2xl transition-all hover:scale-105 hover:-translate-y-4 shadow-md w-11/12 text-center rounded flex flex-col p-2">
-                <div className="bg-rose-400 flex items-center justify-center p-6 rounded text-white">
+                <div className="bg-gradient-to-b from-rose-400 to-rose-300 flex items-center justify-center p-6 rounded text-white">
                   <Icon icon="akar-icons:edit" width={80} />
                 </div>
                 <h5 className="text-lg font-bold text-slate-900 mt-2">
                   Customize like you want
                 </h5>
                 <p className="text-slate-700 text-sm leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolorem, molestias.
+                  Display logo, add custom tweet, filter words, and many more.
                 </p>
               </div>
               <div className="col-span-1 hover:shadow-2xl transition-all hover:rotate-6 hover:scale-105 shadow-md w-11/12 text-center rounded flex flex-col p-2">
-                <div className="bg-indigo-400 flex items-center justify-center p-6 rounded text-white">
+                <div className="bg-gradient-to-bl from-indigo-400 to-indigo-300 flex items-center justify-center p-6 rounded text-white">
                   <Icon icon="dashicons:money-alt" width={80} />
                 </div>
                 <h5 className="text-lg font-bold text-slate-900 mt-2">
                   The best part is, Its Free
                 </h5>
                 <p className="text-slate-700 text-sm leading-relaxed">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolorem, molestias.
+                  We dont charge you at all, you can use all of our features for free
                 </p>
               </div>
             </div>
