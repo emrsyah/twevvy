@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { userState } from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Home = () => {
   const user = useRecoilValue(userState);
@@ -26,6 +27,9 @@ const Home = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Twevvy | Share Your Product Twitter Community Easily In Any Website</title>
+      </Helmet>
       <div className="relative overflow-hidden">
         <div className="relative z-10">
           <Navbar />
@@ -35,7 +39,7 @@ const Home = () => {
         <div className="containerKu pt-24 pb-12 relative z-10">
           {/* Hero */}
           <div className="flex flex-col items-center justify-center">
-            <h1 className="text-6xl inter leading-[1.15] text-slate-900 text-center font-bold">
+            <h1 className="lg:text-6xl text-4xl inter leading-[1.15] text-slate-900 text-center font-bold">
               Share Your Product Twitter Community Easily In Any Website
             </h1>
             <p className="text-center font-medium text-slate-700 text-lg mt-4">
@@ -57,10 +61,10 @@ const Home = () => {
               <br />
               What The Community Said
             </h2>
-            <p className="text-lg font-medium text-slate-700 mt-2">
+            <p className="text-lg text-center font-medium text-slate-700 mt-2">
               People wont take word from you, they need a real reviews
             </p>
-            <div className="grid grid-cols-3 items-center gap-4 mt-6 px-10">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-center gap-4 mt-6 px-10">
               <div className="col-span-1 hover:shadow-2xl transition-all hover:-rotate-6 hover:scale-105 shadow-md w-11/12 text-center rounded flex flex-col p-2">
                 <div className="bg-gradient-to-br from-sky-400  to-sky-300 flex items-center justify-center p-6 rounded text-white">
                   <Icon icon="ant-design:field-time-outlined" width={80} />

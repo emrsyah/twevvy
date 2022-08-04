@@ -10,6 +10,7 @@ import { auth } from "../firebase";
 import Lottie from "lottie-web";
 import lottieJson from './assets/62424-gradient-loader-spinner-light-blue.json'
 import logo from './assets/twevvyNavLogo.svg'
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,7 @@ function App() {
         ) : (
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         )}
       </BrowserRouter>
