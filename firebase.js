@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getAuth, GoogleAuthProvider} from "firebase/auth";
+import { getAuth, GoogleAuthProvider, TwitterAuthProvider} from "firebase/auth";
 
 
 const firebaseConfig = {
@@ -19,5 +19,7 @@ export const firestoreDb = getFirestore(app);
 export const storage = getStorage(app);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+// export const twitterProvider = new TwitterAuthProvider();
 
 
+// const twtCallback = "https://twevvy-d6cf9.firebaseapp.com/__/auth/handler"

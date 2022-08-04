@@ -9,10 +9,13 @@
   },
   "dependencies": {
     "firebase": "^9.9.1",
+    "lottie-web": "^5.9.6",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-helmet": "^6.1.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "react-toastify": "^9.0.7",
+    "recoil": "^0.7.4"
   },
   "devDependencies": {
     "@iconify/react": "^3.2.2",
