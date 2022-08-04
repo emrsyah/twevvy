@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+*{
+    font-family: 'Open Sans', 'Inter';
+}
+
+.inter{
+    font-family: "Inter";
+}
+
+@layer components {
+    .containerKu {
+      @apply max-w-7xl 2xl:mx-auto xl:mx-24 lg:mx-16 mx-8;
+    }
+  }
+  
