@@ -19,7 +19,7 @@ function App() {
     setLoading(true);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // console.log(user)
+        console.log(user)
         setUser({
           userId: user.uid,
           userProfile: user.photoURL,

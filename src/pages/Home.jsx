@@ -1,8 +1,29 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import { Icon } from "@iconify/react";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../../firebase";
+import { toast } from "react-toastify";
+import { userState } from "../atoms/userAtom";
+import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const user = useRecoilValue(userState);
+  const navigate = useNavigate()
+
+  const loginHandler = async () => {
+    try {
+      if(!user){
+        await signInWithPopup(auth, googleProvider);
+        toast.success("Success Login", { autoClose: 2000 });
+      }
+      navigate('/dashboard')
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <div className="relative overflow-hidden">
@@ -21,7 +42,10 @@ const Home = () => {
               Twevvy is an embeddable widgets to share your twitter community
               review and stats easily
             </p>
-            <button className="bg-slate-700 hover:bg-slate-800 text-white text-xl font-semibold py-3 px-8 rounded-md mt-14">
+            <button
+              onClick={() => loginHandler()}
+              className="bg-slate-700 hover:bg-slate-800 text-white text-xl font-semibold py-3 px-8 rounded-md mt-14"
+            >
               Get Started - It's Free 🤩
             </button>
           </div>
@@ -67,7 +91,8 @@ const Home = () => {
                   The best part is, Its Free
                 </h5>
                 <p className="text-slate-700 text-sm leading-relaxed">
-                  We dont charge you at all, you can use all of our features for free
+                  We dont charge you at all, you can use all of our features for
+                  free
                 </p>
               </div>
             </div>
