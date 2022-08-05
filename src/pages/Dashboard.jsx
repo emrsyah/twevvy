@@ -59,6 +59,11 @@ const badWordOptions = [
   { value: false, label: "Dont Filter" },
 ];
 
+const goodTweetOptions = [
+  { value: true, label: "Yes" },
+  { value: false, label: "No Thankyou" },
+];
+
 const includeOptions = [
   { value: true, label: "Include" },
   { value: false, label: "Dont Include" },
@@ -89,27 +94,32 @@ const Dashboard = () => {
             <p className="font-semibold">See What They Said</p>
           </button>
           <div className="col-span-1 shadowCard max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-auto scroll">
-            <div className="flex cursor-pointer items-center gap-4">
-              <img
-                src={
-                  "https://lh3.googleusercontent.com/a-/AFdZucp6A_VoFj4qsbHbmCdBHi7Oy2klN3JIiWVEiAs20mc=s96-c"
-                }
-                className="w-14 h-14 rounded-full"
-                alt="profile"
-              />
-              <div className="flex flex-col gap-0">
-                <h3 className="text-xl font-semibold">emrsyh</h3>
-                <p className="text-slate-600 font-medium">@emrsyahh</p>
+            <div className="flex justify-between items-center">
+              <div className="flex cursor-pointer items-center gap-4">
+                <img
+                  src={
+                    "https://lh3.googleusercontent.com/a-/AFdZucp6A_VoFj4qsbHbmCdBHi7Oy2klN3JIiWVEiAs20mc=s96-c"
+                  }
+                  className="w-14 h-14 rounded-full"
+                  alt="profile"
+                />
+                <div className="flex flex-col gap-0">
+                  <h3 className="text-xl font-semibold">emrsyh</h3>
+                  <p className="text-slate-600 font-medium">@emrsyahh</p>
+                </div>
               </div>
+              <button className="bg-slate-800 text-white py-[6px] hover:bg-slate-900 px-4 rounded-full font-semibold text-sm">
+                Follow
+              </button>
             </div>
-            <div className="bg-sky-500 py-1 font-semibold inter my-3 rounded text-white flex items-center justify-center">
+            <div className="bg-sky-500 cursor-pointer py-1 font-semibold inter my-3 rounded text-white flex items-center justify-center">
               <p className="text-[15px]">
                 13.211 Tweet about emrsyahh this week
               </p>
             </div>
             <div className="flex flex-col gap-4 mt-6">
               {datas.map((d) => (
-                <div className="border-b-[1px] cursor-pointer border-b-gray-300 px-2 pb-2">
+                <div key={d.username} className="border-b-[1px] cursor-pointer border-b-gray-300 px-2 pb-2">
                   <div className="flex gap-3">
                     <img
                       src={d.img}
@@ -184,6 +194,27 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="text-sm">
+                  <p className="font-medium">Show Tweet Count?</p>
+                  <Select
+                    isSearchable={false}
+                    options={countOptions}
+                    defaultValue={countOptions[0]}
+                    className="mt-1"
+                    key={11}
+                  />
+                </div>
+                <div className="text-sm">
+                  <p className="font-medium">Tweet Amount</p>
+                  <input
+                    type="number"
+                    {...register("profile")}
+                    placeholder="1-15"
+                    min={1}
+                    max={15}
+                    className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
+                  />
+                </div>
+                <div className="text-sm">
                   <p className="font-medium">Custom Tweet</p>
                   <input
                     type="text"
@@ -191,24 +222,15 @@ const Dashboard = () => {
                     placeholder="https://twitter.com/"
                     className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
                   />
-                  <div className="bg-sky-500 p-2 flex justify-center rounded-sm mt-2 text-white">
+                  <button className="bg-sky-500 w-full p-2 flex justify-center rounded-sm mt-2 text-white">
                     <Icon icon="akar-icons:plus" width={18} />
-                  </div>
+                  </button>
                 </div>
               </div>
             ) : (
               <div className="flex flex-col gap-4 mt-3">
                 <div className="text-sm">
-                  <p className="font-medium">Show Tweet Count?</p>
-                  <Select
-                    isSearchable={false}
-                    options={countOptions}
-                    defaultValue={countOptions[0]}
-                    className="mt-1"
-                  />
-                </div>
-                <div className="text-sm">
-                  <p className="font-medium">Included Retweet?</p>
+                  <p className="font-medium">Include Retweet?</p>
                   <Select
                     isSearchable={false}
                     options={includeOptions}
@@ -217,12 +239,22 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="text-sm">
-                  <p className="font-medium">Included Reply?</p>
+                  <p className="font-medium">Include Reply?</p>
                   <Select
                     isSearchable={false}
                     options={includeOptions}
                     defaultValue={includeOptions[0]}
                     className="mt-1"
+                  />
+                </div>
+                <div className="text-sm">
+                  <p className="font-medium">Match Our Good Words?</p>
+                  <Select
+                    isSearchable={false}
+                    options={goodTweetOptions}
+                    defaultValue={goodTweetOptions[0]}
+                    className="mt-1"
+                    key={12}
                   />
                 </div>
                 <div className="text-sm">
@@ -232,6 +264,7 @@ const Dashboard = () => {
                     options={badWordOptions}
                     defaultValue={badWordOptions[0]}
                     className="mt-1"
+                    key={10}
                   />
                 </div>
                 <div className="text-sm">
