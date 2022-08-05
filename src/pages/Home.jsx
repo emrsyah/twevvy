@@ -11,15 +11,15 @@ import { Helmet } from "react-helmet";
 
 const Home = () => {
   const user = useRecoilValue(userState);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const loginHandler = async () => {
     try {
-      if(!user){
+      if (!user) {
         await signInWithPopup(auth, googleProvider);
         toast.success("Success Login", { autoClose: 2000 });
       }
-      navigate('/dashboard')
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
     }
@@ -28,18 +28,20 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Twevvy | Share Your Product Twitter Community Easily In Any Website</title>
+        <title>
+          Twevvy | Share Your Product Twitter Community Easily In Any Website
+        </title>
       </Helmet>
       <div className="relative overflow-hidden">
-        <div className="relative z-10">
+        <div className="relative z-[2]">
           <Navbar />
         </div>
         <div className="h-48 w-48 left-12 bg-indigo-700 absolute blur-[200px]"></div>
         <div className="h-52 w-52 bg-pink-500 right-12 top-0 absolute blur-[200px]"></div>
-        <div className="containerKu pt-24 pb-12 relative z-10">
+        <div className="containerKu mt-20 pb-12 relative z-10">
           {/* Hero */}
           <div className="flex flex-col items-center justify-center">
-            <h1 className="lg:text-6xl text-4xl inter leading-[1.15] text-slate-900 text-center font-bold">
+            <h1 className="lg:text-6xl !md:!text-5xl text-4xl inter !leading-[1.15] text-slate-900 text-center font-bold">
               Share Your Product Twitter Community Easily In Any Website
             </h1>
             <p className="text-center font-medium text-slate-700 text-lg mt-4">

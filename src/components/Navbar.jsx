@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { userState } from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
 import { auth, googleProvider } from "../../firebase";
+import NavbarProfile from "./NavbarProfile";
 
 const Navbar = () => {
   const user = useRecoilValue(userState);
@@ -27,19 +28,27 @@ const Navbar = () => {
         <img src={logo} alt="nav logo" className="w-36" />
       </Link>
       {user ? (
-        <button 
-        onClick={()=>navigate('/dashboard')}
-        className="flex gap-3 py-2 px-4 hover:bg-gray-50 rounded-lg items-center bg-white">
-          <p className="font-semibold text-slate-800">Dashboard</p>
-          <img
-            src={
-              "https://avatars.dicebear.com/api/micah/emrsyhh.svg"
-            }
-            alt="profile"
-            className="w-11 h-11 border-2 border-sky-400 rounded-full"
-          />
-          {/* <div className="w-9 h-9 bg-sky-400 rounded-full"></div> */}
-        </button>
+        // <button 
+        // onClick={()=>navigate('/dashboard')}
+        // className="flex gap-3 py-2 px-4 hover:bg-gray-50 rounded-lg items-center bg-white">
+        //   <p className="font-semibold text-slate-800">Dashboard</p>
+        //   {/* <img
+        //     src={
+        //       "https://avatars.dicebear.com/api/micah/emrsyhh.svg"
+        //     }
+        //     alt="profile"
+        //     className="w-11 h-11 border-2 border-sky-400 rounded-full"
+        //   /> */}
+        //   <img
+        //     src={
+        //       user.userProfile
+        //     }
+        //     alt="profile"
+        //     className="w-11 h-11 border-2 border-sky-400 rounded-full"
+        //   />
+        //   {/* <div className="w-9 h-9 bg-sky-400 rounded-full"></div> */}
+        // </button>
+        <NavbarProfile img={user.userProfile} />
       ) : (
         <button
           onClick={() => loginHandler()}
