@@ -16,6 +16,7 @@ const Navbar = () => {
   const loginHandler = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
+      navigate('/dashboard')
       toast.success("Success Login", { autoClose: 2000 });
     } catch (err) {
       console.error(err);

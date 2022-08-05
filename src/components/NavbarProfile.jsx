@@ -2,13 +2,15 @@ import { Menu } from "@headlessui/react";
 import { Icon } from "@iconify/react";
 import { signOut } from "firebase/auth";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 
 function NavbarProfile({ img }) {
+  const navigate = useNavigate()
   const logoutHandler = async () => {
     try {
       signOut(auth);
+      navigate('/')
     } catch (err) {
       console.error(err);
     }
@@ -16,7 +18,7 @@ function NavbarProfile({ img }) {
 
   return (
     <Menu className="relative" as="div">
-      <Menu.Button className="flex gap-3 py-2 px-4 hover:bg-gray-50 rounded-lg items-center bg-white">
+      <Menu.Button className="flex shadow gap-3 py-2 px-4 hover:bg-gray-50 rounded-lg items-center bg-white">
         <p className="font-semibold text-slate-800">Dashboard</p>
         {/* <img
             src={
