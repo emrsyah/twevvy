@@ -79,6 +79,49 @@ const Dashboard = () => {
     setLoading(false);
   }, []);
 
+  const tweets = [
+    {
+      img: "https://avatars.dicebear.com/api/adventurer-neutral/o.svg",
+      name: "ZeroSwag",
+      username: "@zerswa",
+      text: "Lovely! I like the clean look you get with honestly a few clicks. https://youtube.com  @someone",
+      date: "Aug 01, 2022",
+      verified: true,
+    },
+    {
+      img: "https://avatars.dicebear.com/api/adventurer-neutral/ries.svg",
+      name: "NathanielB",
+      username: "@nathb",
+      text: "I absolutely love how easy it is to make a cover with this. Also, the image itself looks nice.",
+      date: "July 23, 2022",
+      verified: true,
+    },
+    {
+      img: "https://avatars.dicebear.com/api/adventurer-neutral/ok.svg",
+      name: "MinZoel",
+      username: "@zoemin",
+      text: "Absolutely amazing product, i can easily customize my widgets and adding cool stuff.",
+      date: "July 30, 2022",
+      verified: false,
+    },
+    {
+      img: "https://avatars.dicebear.com/api/adventurer-neutral/dis.svg",
+      name: "BeautyIsm",
+      username: "@ismBea",
+      text: "Brilliant, its so easy to use and very useful product!",
+      date: "July 28, 2022",
+      verified: false,
+    },
+    {
+      img: "https://avatars.dicebear.com/api/adventurer-neutral/zuaac.svg",
+      name: "Savesta Vi",
+      username: "@viSaves",
+      text: "I absolutely love how easy it is to make a cover with this. Also, the image itself looks nice.",
+      date: "July 19, 2022",
+      verified: false,
+    },
+  ];
+
   const submitHandler = (data) => {
     console.log(data);
   };
@@ -110,8 +153,14 @@ const Dashboard = () => {
             </div>
             <div className=" flex gap-10">
               <div className="flex flex-col gap-3">
-                <TriggerButton />
-                <Widget />
+                <TriggerButton label={"See What They Said"} />
+                <Widget
+                  image="https://lh3.googleusercontent.com/a-/AFdZucp6A_VoFj4qsbHbmCdBHi7Oy2klN3JIiWVEiAs20mc=s96-c"
+                  name="emrsyh"
+                  username="emrsyahh"
+                  count="12.734"
+                  tweets={tweets}
+                />
               </div>
               <div className="flex gap-4">
                 <form

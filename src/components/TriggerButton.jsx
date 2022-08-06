@@ -1,15 +1,15 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 
-const TriggerButton = () => {
+const TriggerButton = ({label}) => {
   return (
-    <button className="py-3 w-full px-4 rounded shadowCard flex items-center gap-2">
+    <button className="py-3 w-full px-4 rounded shadowCard flex items-center gap-3">
       <Icon
         icon="ant-design:twitter-outlined"
-        width={20}
+        width={22}
         className="text-sky-500"
       />
-      <p className="font-semibold">See What They Said</p>
+      <p className="font-semibold">{label}</p>
     </button>
   );
 };
