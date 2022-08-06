@@ -19,7 +19,7 @@ function NavbarProfile({ img }) {
   return (
     <Menu className="relative" as="div">
       <Menu.Button className="flex shadow gap-3 py-2 px-4 hover:bg-gray-50 rounded-lg items-center bg-white">
-        <p className="font-semibold text-slate-800">Dashboard</p>
+        <p className="font-semibold text-slate-800">Account</p>
         {/* <img
             src={
               "https://avatars.dicebear.com/api/micah/emrsyhh.svg"
