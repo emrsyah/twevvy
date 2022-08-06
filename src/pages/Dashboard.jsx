@@ -64,6 +64,40 @@ const goodTweetOptions = [
   { value: false, label: "No Thankyou" },
 ];
 
+const langOption = [
+  { value: "", label: "All" },
+  { value: "de", label: "German" },
+  { value: "ml", label: "Malayalam" },
+  { value: "sk", label: "Slovak" },
+  { value: "ar", label: "Arabic" },
+  { value: "es", label: "Spanish" },
+  { value: "no", label: "Norwegian" },
+  { value: "sv", label: "Swedish" },
+  { value: "hi", label: "Hindi" },
+  { value: "tl", label: "Tagalog" },
+  { value: "bg", label: "Bulgarian" },
+  { value: "pa", label: "Panjabi" },
+  { value: "hu", label: "HUngarian" },
+  { value: "hr", label: "Croatian" },
+  { value: "th", label: "Thai" },
+  { value: "in", label: "Indonesian" },
+  { value: "pl", label: "Polish" },
+  { value: "cs", label: "Czech" },
+  { value: "it", label: "Italian" },
+  { value: "pt", label: "Portuguese" },
+  { value: "ja", label: "Japanese" },
+  { value: "ro", label: "Romanian" },
+  { value: "tr", label: "Turkish" },
+  { value: "nl", label: "Dutch" },
+  { value: "ru", label: "Russian" },
+  { value: "uk", label: "Ukrainian" },
+  { value: "en", label: "English" },
+  { value: "tr", label: "Turkish" },
+  { value: "ko", label: "Korean" },
+  { value: "vi", label: "Vietnamese" },
+  { value: "fr", label: "French" },
+];
+
 const includeOptions = [
   { value: true, label: "Include" },
   { value: false, label: "Dont Include" },
@@ -268,6 +302,15 @@ const Dashboard = () => {
                     />
                   </div>
                   <div className="text-sm">
+                    <p className="font-medium">Tweet Language</p>
+                    <Select
+                      isSearchable={false}
+                      options={langOption}
+                      defaultValue={langOption[26]}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div className="text-sm">
                     <p className="font-medium">Match Our Good Words?</p>
                     <Select
                       isSearchable={false}
@@ -301,7 +344,7 @@ const Dashboard = () => {
                   </div>
                   <div className="text-sm">
                     <p className="font-medium">
-                      Filter Specific Words{" "}
+                      Ban Specific Words{" "}
                       <span className="text-slate-600">(Comma Separated)</span>
                     </p>
                     <input
@@ -318,7 +361,7 @@ const Dashboard = () => {
               <div
                 onClick={() => setIsBasic(true)}
                 className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
-                  isBasic && "text-sky-500"
+                  isBasic && "!text-sky-500"
                 }`}
               >
                 <Icon icon="ic:outline-format-list-bulleted" width={20} />
@@ -327,7 +370,7 @@ const Dashboard = () => {
               <div
                 onClick={() => setIsBasic(false)}
                 className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
-                  !isBasic && "text-sky-500"
+                  !isBasic && "!text-sky-500"
                 }`}
               >
                 <Icon icon="carbon:filter" width={20} />
