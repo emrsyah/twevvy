@@ -4,11 +4,12 @@ import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../atoms/userAtom";
 import { useNavigate } from "react-router-dom";
-import Widget from "../components/Widget";
 import TriggerButton from "../components/TriggerButton";
+import WidgetComponent from "../components/WidgetComponent";
+import { widgetState } from "../atoms/widgetAtom";
 
 const countOptions = [
   { value: true, label: "Show" },
@@ -64,6 +65,21 @@ const includeOptions = [
   { value: false, label: "Dont Include" },
 ];
 
+const widget = {
+  profileUrl: "https://twitter.com/emrsyahh",
+  buttonLabel: "See What They Said",
+  showCount: { label: "Show", value: true },
+  tweetAmount: 5,
+  customTweet: [],
+  filterRetweet: { label: "Include", value: true },
+  filterReply: { label: "Include", value: true },
+  tweetLang: { label: "English", value: "en" },
+  matchGood: { label: "Yes", value: true },
+  banBad: { label: "Filter", value: true },
+  matchSpecific: [],
+  banSpecific: [],
+};
+
 // TODO Ekstrak Widget Component
 
 const Dashboard = () => {
@@ -72,6 +88,7 @@ const Dashboard = () => {
   const user = useRecoilValue(userState);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // const [widgetAtom, setWidgetAtom] = useRecoilState(widgetState)
 
   useEffect(() => {
     setLoading(true);
@@ -154,7 +171,7 @@ const Dashboard = () => {
             <div className=" flex gap-10">
               <div className="flex flex-col gap-3">
                 <TriggerButton label={"See What They Said"} />
-                <Widget
+                <WidgetComponent
                   image="https://lh3.googleusercontent.com/a-/AFdZucp6A_VoFj4qsbHbmCdBHi7Oy2klN3JIiWVEiAs20mc=s96-c"
                   name="emrsyh"
                   username="emrsyahh"
@@ -162,172 +179,190 @@ const Dashboard = () => {
                   tweets={tweets}
                 />
               </div>
-              <div className="flex gap-4">
-                <form
-                  className="col-span-1 shadow-xl rounded p-3 h-fit flex flex-col"
-                  onSubmit={handleSubmit(submitHandler)}
-                >
-                  <div className="flex items-center gap-10">
-                    <h3 className="text-lg font-semibold">
-                      Customize Your Twevvy
-                    </h3>
-                    <button className="bg-sky-500 flex items-center gap-2 text-white py-1 px-3 font-medium rounded">
-                      <p>Save</p>
-                      <Icon icon="fluent:save-24-filled" width={18} />
-                    </button>
-                  </div>
-                  {isBasic ? (
-                    <div className="flex flex-col gap-4 mt-3">
-                      <div className="text-sm">
-                        <p className="font-medium">Profile URL</p>
-                        <input
-                          type="text"
-                          {...register("profile")}
-                          placeholder="https://twitter.com/"
-                          className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">Button Label</p>
-                        <input
-                          type="text"
-                          {...register("profile")}
-                          placeholder="See What They Said"
-                          className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">Show Tweet Count?</p>
-                        <Select
-                          isSearchable={false}
-                          options={countOptions}
-                          defaultValue={countOptions[0]}
-                          className="mt-1"
-                          key={11}
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">Tweet Amount</p>
-                        <input
-                          type="number"
-                          {...register("profile")}
-                          placeholder="1-15"
-                          min={1}
-                          max={15}
-                          className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">Custom Tweet</p>
-                        <input
-                          type="text"
-                          {...register("profile")}
-                          placeholder="https://twitter.com/"
-                          className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
-                        />
-                        <button className="bg-sky-500 w-full p-2 flex justify-center rounded-sm mt-2 text-white">
-                          <Icon icon="akar-icons:plus" width={18} />
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col gap-4 mt-3">
-                      <div className="text-sm">
-                        <p className="font-medium">Include Retweet?</p>
-                        <Select
-                          isSearchable={false}
-                          options={includeOptions}
-                          defaultValue={includeOptions[0]}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">Include Reply?</p>
-                        <Select
-                          isSearchable={false}
-                          options={includeOptions}
-                          defaultValue={includeOptions[0]}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">Tweet Language</p>
-                        <Select
-                          isSearchable={true}
-                          options={langOption}
-                          defaultValue={langOption[26]}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">Match Our Good Words?</p>
-                        <Select
-                          isSearchable={false}
-                          options={goodTweetOptions}
-                          defaultValue={goodTweetOptions[0]}
-                          className="mt-1"
-                          key={12}
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">Filter Bad Word?</p>
-                        <Select
-                          isSearchable={false}
-                          options={badWordOptions}
-                          defaultValue={badWordOptions[0]}
-                          className="mt-1"
-                          key={10}
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">
-                          Match Specific Words{" "}
-                          <span className="text-slate-600">
-                            (Comma Separated)
-                          </span>
-                        </p>
-                        <input
-                          type="text"
-                          {...register("specific")}
-                          placeholder="Comma Separated Words"
-                          className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
-                        />
-                      </div>
-                      <div className="text-sm">
-                        <p className="font-medium">
-                          Ban Specific Words{" "}
-                          <span className="text-slate-600">
-                            (Comma Separated)
-                          </span>
-                        </p>
-                        <input
-                          type="text"
-                          {...register("specific")}
-                          placeholder="Comma Separated Words"
-                          className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </form>
-                <div className="flex flex-col gap-2 my-4">
-                  <div
-                    onClick={() => setIsBasic(true)}
-                    className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
-                      isBasic && "!text-sky-500"
-                    }`}
+              <div className="flex gap-3 flex-col">
+                <div className="bg-sky-100 border-2 border-sky-500 flex items-center gap-2 rounded text-sky-600 py-2 px-4">
+                  <Icon icon="ant-design:info-circle-outlined" width={20} />
+                  <p>Save to see widget changes</p>
+                </div>
+                <div className="flex gap-3">
+                  <form
+                    className="col-span-1 shadow-xl rounded p-3 h-fit flex flex-col"
+                    onSubmit={handleSubmit(submitHandler)}
                   >
-                    <Icon icon="ic:outline-format-list-bulleted" width={20} />
-                    <p>Basic</p>
-                  </div>
-                  <div
-                    onClick={() => setIsBasic(false)}
-                    className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
-                      !isBasic && "!text-sky-500"
-                    }`}
-                  >
-                    <Icon icon="carbon:filter" width={20} />
-                    <p>Filter</p>
+                    <div className="flex items-center gap-10">
+                      <h3 className="text-lg font-semibold">
+                        Customize Your Twevvy
+                      </h3>
+                      <button className="bg-sky-500 flex items-center gap-2 text-white py-1 px-3 font-medium rounded">
+                        <p>Save</p>
+                        <Icon icon="fluent:save-24-filled" width={18} />
+                      </button>
+                    </div>
+                    {isBasic ? (
+                      <div className="flex flex-col gap-4 mt-3">
+                        <div className="text-sm">
+                          <p className="font-medium">Profile URL</p>
+                          <input
+                            type="text"
+                            defaultValue={widget.profileUrl}
+                            {...register("profileUrl")}
+                            placeholder="https://twitter.com/"
+                            className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">Button Label</p>
+                          <input
+                            type="text"
+                            defaultValue={widget.buttonLabel}
+                            {...register("buttonLabel")}
+                            placeholder="See What They Said"
+                            className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">Show Tweet Count?</p>
+                          <Select
+                            defaultValue={widget.showCount}
+                            {...register("showCount")}
+                            isSearchable={false}
+                            options={countOptions}
+                            className="mt-1"
+                            key={11}
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">Tweet Amount</p>
+                          <input
+                            defaultValue={widget.tweetAmount}
+                            type="number"
+                            {...register("tweetAmount")}
+                            placeholder="1-20"
+                            min={1}
+                            max={20}
+                            className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">Custom Tweet</p>
+                          <input
+                            defaultValue={widget.customTweet}
+                            type="text"
+                            {...register("customTweet")}
+                            placeholder="https://twitter.com/"
+                            className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
+                          />
+                          <button className="bg-sky-500 w-full p-2 flex justify-center rounded-sm mt-2 text-white">
+                            <Icon icon="akar-icons:plus" width={18} />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-4 mt-3">
+                        <div className="text-sm">
+                          <p className="font-medium">Include Retweet?</p>
+                          <Select
+                            defaultValue={widget.filterRetweet}
+                            {...register("filterRetweet")}
+                            isSearchable={false}
+                            options={includeOptions}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">Include Reply?</p>
+                          <Select
+                            defaultValue={widget.filterReply}
+                            {...register("filterReply")}
+                            isSearchable={false}
+                            options={includeOptions}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">Tweet Language</p>
+                          <Select
+                            defaultValue={widget.tweetLang}
+                            {...register("tweetLang")}
+                            isSearchable={true}
+                            options={langOption}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">Match Our Good Words?</p>
+                          <Select
+                            defaultValue={widget.matchGood}
+                            {...register("matchGood")}
+                            isSearchable={false}
+                            options={goodTweetOptions}
+                            className="mt-1"
+                            key={12}
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">Filter Bad Word?</p>
+                          <Select
+                            defaultValue={widget.banBad}
+                            {...register("banBad")}
+                            isSearchable={false}
+                            options={badWordOptions}
+                            className="mt-1"
+                            key={10}
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">
+                            Match Specific Words{" "}
+                            <span className="text-slate-600">
+                              (Comma Separated)
+                            </span>
+                          </p>
+                          <input
+                            defaultValue={widget.matchSpecific}
+                            {...register("matchSpecific")}
+                            type="text"
+                            placeholder="Comma Separated Words"
+                            className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
+                          />
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium">
+                            Ban Specific Words{" "}
+                            <span className="text-slate-600">
+                              (Comma Separated)
+                            </span>
+                          </p>
+                          <input
+                            defaultValue={widget.banSpecific}
+                            {...register("banSpecific")}
+                            type="text"
+                            placeholder="Comma Separated Words"
+                            className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </form>
+                  <div className="flex flex-col gap-2">
+                    <div
+                      onClick={() => setIsBasic(true)}
+                      className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
+                        isBasic && "!text-sky-500"
+                      }`}
+                    >
+                      <Icon icon="ic:outline-format-list-bulleted" width={20} />
+                      <p>Basic</p>
+                    </div>
+                    <div
+                      onClick={() => setIsBasic(false)}
+                      className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
+                        !isBasic && "!text-sky-500"
+                      }`}
+                    >
+                      <Icon icon="carbon:filter" width={20} />
+                      <p>Filter</p>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import logo from "../assets/twevvyLogo.svg";
 
-const Widget = ({ image, name, username, count, tweets }) => {
+const WidgetComponent = ({ image, name, username, count, tweets }) => {
   return (
     <div className="col-span-1 shadowCard max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-auto scroll">
       <div className="flex justify-between items-center">
@@ -71,4 +71,4 @@ const Widget = ({ image, name, username, count, tweets }) => {
   );
 };
 
-export default Widget;
+export default WidgetComponent;
