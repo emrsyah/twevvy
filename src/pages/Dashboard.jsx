@@ -10,60 +10,14 @@ import { useNavigate } from "react-router-dom";
 import TriggerButton from "../components/TriggerButton";
 import WidgetComponent from "../components/WidgetComponent";
 import { widgetState } from "../atoms/widgetAtom";
-
-const countOptions = [
-  { value: true, label: "Show" },
-  { value: false, label: "Dont Show" },
-];
-
-const badWordOptions = [
-  { value: true, label: "Filter" },
-  { value: false, label: "Dont Filter" },
-];
-
-const goodTweetOptions = [
-  { value: true, label: "Yes" },
-  { value: false, label: "No Thankyou" },
-];
-
-const langOption = [
-  { value: "", label: "All" },
-  { value: "de", label: "German" },
-  { value: "ml", label: "Malayalam" },
-  { value: "sk", label: "Slovak" },
-  { value: "ar", label: "Arabic" },
-  { value: "es", label: "Spanish" },
-  { value: "no", label: "Norwegian" },
-  { value: "sv", label: "Swedish" },
-  { value: "hi", label: "Hindi" },
-  { value: "tl", label: "Tagalog" },
-  { value: "bg", label: "Bulgarian" },
-  { value: "pa", label: "Panjabi" },
-  { value: "hu", label: "Hungarian" },
-  { value: "hr", label: "Croatian" },
-  { value: "th", label: "Thai" },
-  { value: "in", label: "Indonesian" },
-  { value: "pl", label: "Polish" },
-  { value: "cs", label: "Czech" },
-  { value: "it", label: "Italian" },
-  { value: "pt", label: "Portuguese" },
-  { value: "ja", label: "Japanese" },
-  { value: "ro", label: "Romanian" },
-  { value: "tr", label: "Turkish" },
-  { value: "nl", label: "Dutch" },
-  { value: "ru", label: "Russian" },
-  { value: "uk", label: "Ukrainian" },
-  { value: "en", label: "English" },
-  { value: "tr", label: "Turkish" },
-  { value: "ko", label: "Korean" },
-  { value: "vi", label: "Vietnamese" },
-  { value: "fr", label: "French" },
-];
-
-const includeOptions = [
-  { value: true, label: "Include" },
-  { value: false, label: "Dont Include" },
-];
+import {
+  badWordOptions,
+  countOptions,
+  goodTweetOptions,
+  includeOptions,
+  langOption,
+} from "../data/optionData";
+import { badWords, goodWords } from "../data/queryData";
 
 const widget = {
   profileUrl: "https://twitter.com/emrsyahh",
@@ -76,15 +30,20 @@ const widget = {
   tweetLang: { label: "English", value: "en" },
   matchGood: { label: "Yes", value: true },
   banBad: { label: "Filter", value: true },
-  matchSpecific: [],
-  banSpecific: [],
+  matchSpecific: "",
+  banSpecific: "",
 };
 
 // TODO Ekstrak Widget Component
 // ! Problem : Data yang object di form gak ke detek - kemungkinan krn masalah yg this object ATAU krn react select ama react hook formnya gak saling support, form filter gak kedetek misalnya gak ngebuka mrk - jadi harus dibuka dulu baru kedetek - kalo langsung save di basci sebelum buka  filter dia gak bakalan ada.
 
 const Dashboard = () => {
-  const { register, handleSubmit, setValue, getValues, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { isDirty, isValid },
+  } = useForm();
   const [isBasic, setIsBasic] = useState(true);
   const user = useRecoilValue(userState);
   const navigate = useNavigate();
@@ -142,7 +101,36 @@ const Dashboard = () => {
 
   const submitHandler = (data) => {
     console.log(data);
+    getData(data);
   };
+
+  const getData = (data) => {
+    const countQuery = "@tailwindcss OR tailwindcss OR #tailwindcss";
+    const username = data?.profileUrl.split(".com/")[1];
+    const lang = data?.tweetLang.value ? `lang:${data?.tweetLang.value}` : "";
+    const isRetweet = data?.filterRetweet.value ? "" : "-is:retweet";
+    const isReply = data?.filterReply.value ? "" : "-is:reply";
+    const matchGood = data?.matchGood.value ? goodWords : "";
+    const banBad = data?.banBad.value ? badWords : "";
+    const matchSpecific = data?.matchSpecific.split(",").join(" ");
+    const banSpecific = data?.banSpecific !== "" ? data?.banSpecific
+      .split(",")
+      .map((d) => `-${d}`)
+      .join(" ") : ""
+
+    const tweetQuery = ("".concat(username, " ", lang, " ", isRetweet, " ", isReply, " ", matchGood, " ", banBad, " ", matchSpecific, " ", banSpecific))
+    console.log(tweetQuery);
+
+    // const urls = [
+    //   `https://api.twitter.com/2/users/by/username/${username}?user.fields=profile_image_url`,
+    //   `https://api.twitter.com/2/tweets/counts/recent?query=@${username}`,
+
+    // ]
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
@@ -181,7 +169,7 @@ const Dashboard = () => {
                 />
               </div>
               <div className="flex gap-3 flex-col">
-                <div className="bg-sky-100 border-2 border-sky-500 flex items-center gap-2 rounded text-sky-600 py-2 px-4">
+                <div className="bg-sky-100 border-2 font-medium border-sky-500 flex items-center gap-2 rounded text-sky-600 py-2 px-4">
                   <Icon icon="ant-design:info-circle-outlined" width={20} />
                   <p>Save to see widget changes</p>
                 </div>
@@ -195,8 +183,11 @@ const Dashboard = () => {
                         Customize Your Twevvy
                       </h3>
                       <button
+                        disabled={!isDirty || !isValid}
                         type="submit"
-                        className="bg-sky-500 flex items-center gap-2 text-white py-1 px-3 font-medium rounded"
+                        className={`bg-sky-500 flex items-center gap-2 text-white py-1 px-3 font-medium rounded ${
+                          (!isDirty || !isValid) && "bg-sky-300"
+                        }`}
                       >
                         <p>Save</p>
                         <Icon icon="fluent:save-24-filled" width={18} />
