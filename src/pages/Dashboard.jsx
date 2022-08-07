@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../atoms/userAtom";
@@ -81,9 +81,10 @@ const widget = {
 };
 
 // TODO Ekstrak Widget Component
+// ! Problem : Data yang object di form gak ke detek - kemungkinan krn masalah yg this object ATAU krn react select ama react hook formnya gak saling support, form filter gak kedetek misalnya gak ngebuka mrk - jadi harus dibuka dulu baru kedetek - kalo langsung save di basci sebelum buka  filter dia gak bakalan ada.
 
 const Dashboard = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue, getValues, control } = useForm();
   const [isBasic, setIsBasic] = useState(true);
   const user = useRecoilValue(userState);
   const navigate = useNavigate();
@@ -193,7 +194,10 @@ const Dashboard = () => {
                       <h3 className="text-lg font-semibold">
                         Customize Your Twevvy
                       </h3>
-                      <button className="bg-sky-500 flex items-center gap-2 text-white py-1 px-3 font-medium rounded">
+                      <button
+                        type="submit"
+                        className="bg-sky-500 flex items-center gap-2 text-white py-1 px-3 font-medium rounded"
+                      >
                         <p>Save</p>
                         <Icon icon="fluent:save-24-filled" width={18} />
                       </button>
@@ -222,13 +226,25 @@ const Dashboard = () => {
                         </div>
                         <div className="text-sm">
                           <p className="font-medium">Show Tweet Count?</p>
-                          <Select
+                          <Controller
+                            control={control}
                             defaultValue={widget.showCount}
-                            {...register("showCount")}
-                            isSearchable={false}
-                            options={countOptions}
-                            className="mt-1"
+                            name="showCount"
                             key={11}
+                            render={({ field: { onChange, value, ref } }) => (
+                              <Select
+                                inputRef={ref}
+                                {...register("showCount")}
+                                isSearchable={false}
+                                options={countOptions}
+                                className="mt-1"
+                                key={11}
+                                value={countOptions.find(
+                                  (c) => c.value === value.value
+                                )}
+                                onChange={(val) => onChange(val)}
+                              />
+                            )}
                           />
                         </div>
                         <div className="text-sm">
@@ -261,54 +277,109 @@ const Dashboard = () => {
                       <div className="flex flex-col gap-4 mt-3">
                         <div className="text-sm">
                           <p className="font-medium">Include Retweet?</p>
-                          <Select
+                          <Controller
+                            control={control}
                             defaultValue={widget.filterRetweet}
-                            {...register("filterRetweet")}
-                            isSearchable={false}
-                            options={includeOptions}
-                            className="mt-1"
+                            name="filterRetweet"
+                            render={({ field: { onChange, value, ref } }) => (
+                              <Select
+                                inputRef={ref}
+                                {...register("filterRetweet")}
+                                isSearchable={false}
+                                options={includeOptions}
+                                className="mt-1"
+                                value={includeOptions.find(
+                                  (c) => c.value === value.value
+                                )}
+                                onChange={(val) => onChange(val)}
+                              />
+                            )}
                           />
                         </div>
                         <div className="text-sm">
                           <p className="font-medium">Include Reply?</p>
-                          <Select
+                          <Controller
+                            control={control}
                             defaultValue={widget.filterReply}
-                            {...register("filterReply")}
-                            isSearchable={false}
-                            options={includeOptions}
-                            className="mt-1"
+                            name="filterReply"
+                            render={({ field: { onChange, value, ref } }) => (
+                              <Select
+                                inputRef={ref}
+                                {...register("filterReply")}
+                                isSearchable={false}
+                                options={includeOptions}
+                                className="mt-1"
+                                value={includeOptions.find(
+                                  (c) => c.value === value.value
+                                )}
+                                onChange={(val) => onChange(val)}
+                              />
+                            )}
                           />
                         </div>
                         <div className="text-sm">
                           <p className="font-medium">Tweet Language</p>
-                          <Select
+                          <Controller
+                            control={control}
                             defaultValue={widget.tweetLang}
-                            {...register("tweetLang")}
-                            isSearchable={true}
-                            options={langOption}
-                            className="mt-1"
+                            name="tweetLang"
+                            render={({ field: { onChange, value, ref } }) => (
+                              <Select
+                                inputRef={ref}
+                                name="tweetLang"
+                                {...register("tweetLang")}
+                                isSearchable={true}
+                                options={langOption}
+                                key={20}
+                                className="mt-1"
+                                value={langOption.find(
+                                  (c) => c.value === value.value
+                                )}
+                                onChange={(val) => onChange(val)}
+                              />
+                            )}
                           />
                         </div>
                         <div className="text-sm">
                           <p className="font-medium">Match Our Good Words?</p>
-                          <Select
+                          <Controller
+                            control={control}
                             defaultValue={widget.matchGood}
-                            {...register("matchGood")}
-                            isSearchable={false}
-                            options={goodTweetOptions}
-                            className="mt-1"
-                            key={12}
+                            name="matchGood"
+                            render={({ field: { onChange, value, ref } }) => (
+                              <Select
+                                inputRef={ref}
+                                {...register("matchGood")}
+                                isSearchable={false}
+                                options={goodTweetOptions}
+                                className="mt-1"
+                                value={goodTweetOptions.find(
+                                  (c) => c.value === value.value
+                                )}
+                                onChange={(val) => onChange(val)}
+                              />
+                            )}
                           />
                         </div>
                         <div className="text-sm">
                           <p className="font-medium">Filter Bad Word?</p>
-                          <Select
+                          <Controller
+                            control={control}
                             defaultValue={widget.banBad}
-                            {...register("banBad")}
-                            isSearchable={false}
-                            options={badWordOptions}
-                            className="mt-1"
-                            key={10}
+                            name="banBad"
+                            render={({ field: { onChange, value, ref } }) => (
+                              <Select
+                                inputRef={ref}
+                                {...register("banBad")}
+                                isSearchable={false}
+                                options={badWordOptions}
+                                className="mt-1"
+                                value={badWordOptions.find(
+                                  (c) => c.value === value.value
+                                )}
+                                onChange={(val) => onChange(val)}
+                              />
+                            )}
                           />
                         </div>
                         <div className="text-sm">
