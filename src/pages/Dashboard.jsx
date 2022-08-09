@@ -23,7 +23,7 @@ const widget = {
   profileUrl: "https://twitter.com/emrsyahh",
   buttonLabel: "See What They Said",
   showCount: { label: "Show", value: true },
-  tweetAmount: 5,
+  tweetAmount: 10,
   customTweet: [],
   filterRetweet: { label: "Include", value: true },
   filterReply: { label: "Include", value: true },
@@ -34,6 +34,12 @@ const widget = {
   banSpecific: "",
 };
 
+const myHeaders = new Headers();
+myHeaders.append(
+  "Authorization",
+  `Bearer ${import.meta.env.VITE_REACT_APP_BEARER_TOKEN}`
+);
+
 // TODO Ekstrak Widget Component
 // ! Problem : Data yang object di form gak ke detek - kemungkinan krn masalah yg this object ATAU krn react select ama react hook formnya gak saling support, form filter gak kedetek misalnya gak ngebuka mrk - jadi harus dibuka dulu baru kedetek - kalo langsung save di basci sebelum buka  filter dia gak bakalan ada.
 
@@ -42,8 +48,10 @@ const Dashboard = () => {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { isDirty, isValid },
   } = useForm();
+  // const oke = import.meta.env.VITE_REACT_APP_BEARER_TOKEN
   const [isBasic, setIsBasic] = useState(true);
   const user = useRecoilValue(userState);
   const navigate = useNavigate();
@@ -52,6 +60,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     setLoading(true);
+    // console.log(oke)
     if (!user) navigate("/", { replace: true });
     setLoading(false);
   }, []);
@@ -104,33 +113,73 @@ const Dashboard = () => {
     getData(data);
   };
 
-  const getData = (data) => {
+  const getData = async (data) => {
     const countQuery = "@tailwindcss OR tailwindcss OR #tailwindcss";
     const username = data?.profileUrl.split(".com/")[1];
+    const usernameMention = "@".concat(username);
     const lang = data?.tweetLang.value ? `lang:${data?.tweetLang.value}` : "";
     const isRetweet = data?.filterRetweet.value ? "" : "-is:retweet";
     const isReply = data?.filterReply.value ? "" : "-is:reply";
     const matchGood = data?.matchGood.value ? goodWords : "";
     const banBad = data?.banBad.value ? badWords : "";
     const matchSpecific = data?.matchSpecific.split(",").join(" ");
-    const banSpecific = data?.banSpecific !== "" ? data?.banSpecific
-      .split(",")
-      .map((d) => `-${d}`)
-      .join(" ") : ""
+    const maxTweet = data?.tweetAmount;
+    const banSpecific =
+      data?.banSpecific !== ""
+        ? data?.banSpecific
+            .split(",")
+            .map((d) => `-${d}`)
+            .join(" ")
+        : "";
 
-    const tweetQuery = ("".concat(username, " ", lang, " ", isRetweet, " ", isReply, " ", matchGood, " ", banBad, " ", matchSpecific, " ", banSpecific))
-    console.log(tweetQuery);
+    const tweetQuery = "".concat(
+      usernameMention,
+      " ",
+      lang,
+      " ",
+      isRetweet,
+      " ",
+      isReply,
+      " ",
+      matchGood,
+      " ",
+      banBad,
+      " ",
+      matchSpecific,
+      " ",
+      banSpecific
+    );
 
-    // const urls = [
-    //   `https://api.twitter.com/2/users/by/username/${username}?user.fields=profile_image_url`,
-    //   `https://api.twitter.com/2/tweets/counts/recent?query=@${username}`,
+    const urlProfile = `https://twevvy-be.herokuapp.com/api/v1/twitterProfile/${username}`;
+    const urlCount = `https://twevvy-be.herokuapp.com/api/v1/countRecent/notionhq`;
+    const urlTweetRecent = `https://twevvy-be.herokuapp.com/api/v1/tweetRecent`;
+    const urlTweeyIds = `https://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
 
-    // ]
+    // const res = await fetch(urlCount)
+    // const dataJson = await res.json()
+    // console.log(data)
   };
 
   useEffect(() => {
-    getData();
+    register("filterRetweet");
+    setValue("filterRetweet", widget.filterRetweet);
+    register("filterReply");
+    setValue("filterReply", widget.filterReply);
+    register("tweetLang");
+    setValue("tweetLang", widget.tweetLang);
+    register("matchGood");
+    setValue("matchGood", widget.matchGood);
+    register("banBad");
+    setValue("banBad", widget.banBad);
+    register("matchSpecific");
+    setValue("matchSpecific", widget.matchSpecific);
+    register("banSpecific");
+    setValue("banSpecific", widget.banSpecific);
   }, []);
+
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return (
     <>
@@ -142,7 +191,7 @@ const Dashboard = () => {
       ) : (
         <>
           <Navbar />
-          <div className="containerKu my-8 px-20">
+          <div className="containerKu my-8 2xl:px-20 xl:px-16 px-0">
             <div className="shadow-md py-2 px-4 flex items-center justify-between rounded mb-5">
               <p className="text-[15px] truncate text-slate-700">
                 {`
@@ -157,7 +206,7 @@ const Dashboard = () => {
                 <Icon icon="fluent:clipboard-16-regular" width={24} />
               </div>
             </div>
-            <div className=" flex gap-10">
+            <div className=" flex xl:gap-10 gap-6">
               <div className="flex flex-col gap-3">
                 <TriggerButton label={"See What They Said"} />
                 <WidgetComponent
@@ -243,10 +292,10 @@ const Dashboard = () => {
                           <input
                             defaultValue={widget.tweetAmount}
                             type="number"
-                            {...register("tweetAmount")}
-                            placeholder="1-20"
-                            min={1}
-                            max={20}
+                            {...register("tweetAmount", { min: 10, max: 15 })}
+                            placeholder="10-15"
+                            min={10}
+                            max={15}
                             className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
                           />
                         </div>
