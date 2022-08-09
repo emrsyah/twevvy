@@ -18,6 +18,7 @@ import {
   langOption,
 } from "../data/optionData";
 import { badWords, goodWords } from "../data/queryData";
+import axios from "axios";
 
 const widget = {
   profileUrl: "https://twitter.com/emrsyahh",
@@ -34,11 +35,54 @@ const widget = {
   banSpecific: "",
 };
 
-const myHeaders = new Headers();
-myHeaders.append(
-  "Authorization",
-  `Bearer ${import.meta.env.VITE_REACT_APP_BEARER_TOKEN}`
-);
+const tweets = [
+  {
+    img: "https://avatars.dicebear.com/api/adventurer-neutral/o.svg",
+    name: "ZeroSwag",
+    username: "@zerswa",
+    text: "Lovely! I like the clean look you get with honestly a few clicks. https://youtube.com  @someone",
+    date: "Aug 01, 2022",
+    verified: true,
+  },
+  {
+    img: "https://avatars.dicebear.com/api/adventurer-neutral/ries.svg",
+    name: "NathanielB",
+    username: "@nathb",
+    text: "I absolutely love how easy it is to make a cover with this. Also, the image itself looks nice.",
+    date: "July 23, 2022",
+    verified: true,
+  },
+  {
+    img: "https://avatars.dicebear.com/api/adventurer-neutral/ok.svg",
+    name: "MinZoel",
+    username: "@zoemin",
+    text: "Absolutely amazing product, i can easily customize my widgets and adding cool stuff.",
+    date: "July 30, 2022",
+    verified: false,
+  },
+  {
+    img: "https://avatars.dicebear.com/api/adventurer-neutral/dis.svg",
+    name: "BeautyIsm",
+    username: "@ismBea",
+    text: "Brilliant, its so easy to use and very useful product!",
+    date: "July 28, 2022",
+    verified: false,
+  },
+  {
+    img: "https://avatars.dicebear.com/api/adventurer-neutral/zuaac.svg",
+    name: "Savesta Vi",
+    username: "@viSaves",
+    text: "I absolutely love how easy it is to make a cover with this. Also, the image itself looks nice.",
+    date: "July 19, 2022",
+    verified: false,
+  },
+];
+
+// const myHeaders = new Headers();
+// myHeaders.append(
+//   "Authorization",
+//   `Bearer ${import.meta.env.VITE_REACT_APP_BEARER_TOKEN}`
+// );
 
 // TODO Ekstrak Widget Component
 // ! Problem : Data yang object di form gak ke detek - kemungkinan krn masalah yg this object ATAU krn react select ama react hook formnya gak saling support, form filter gak kedetek misalnya gak ngebuka mrk - jadi harus dibuka dulu baru kedetek - kalo langsung save di basci sebelum buka  filter dia gak bakalan ada.
@@ -49,74 +93,36 @@ const Dashboard = () => {
     handleSubmit,
     control,
     setValue,
+    getValues,
     formState: { isDirty, isValid },
   } = useForm();
-  // const oke = import.meta.env.VITE_REACT_APP_BEARER_TOKEN
   const [isBasic, setIsBasic] = useState(true);
   const user = useRecoilValue(userState);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // const [widgetAtom, setWidgetAtom] = useRecoilState(widgetState)
+  const [customTweets, setCustomTweets] = useState([
+    "https://twitter.com/xavierofficials/status/1556895212030644224",
+    "https://twitter.com/FarzaTV/status/1556864174185074688",
+    "https://twitter.com/YajasSardana/status/1556874006544138240",
+  ]);
 
   useEffect(() => {
     setLoading(true);
-    // console.log(oke)
     if (!user) navigate("/", { replace: true });
     setLoading(false);
   }, []);
 
-  const tweets = [
-    {
-      img: "https://avatars.dicebear.com/api/adventurer-neutral/o.svg",
-      name: "ZeroSwag",
-      username: "@zerswa",
-      text: "Lovely! I like the clean look you get with honestly a few clicks. https://youtube.com  @someone",
-      date: "Aug 01, 2022",
-      verified: true,
-    },
-    {
-      img: "https://avatars.dicebear.com/api/adventurer-neutral/ries.svg",
-      name: "NathanielB",
-      username: "@nathb",
-      text: "I absolutely love how easy it is to make a cover with this. Also, the image itself looks nice.",
-      date: "July 23, 2022",
-      verified: true,
-    },
-    {
-      img: "https://avatars.dicebear.com/api/adventurer-neutral/ok.svg",
-      name: "MinZoel",
-      username: "@zoemin",
-      text: "Absolutely amazing product, i can easily customize my widgets and adding cool stuff.",
-      date: "July 30, 2022",
-      verified: false,
-    },
-    {
-      img: "https://avatars.dicebear.com/api/adventurer-neutral/dis.svg",
-      name: "BeautyIsm",
-      username: "@ismBea",
-      text: "Brilliant, its so easy to use and very useful product!",
-      date: "July 28, 2022",
-      verified: false,
-    },
-    {
-      img: "https://avatars.dicebear.com/api/adventurer-neutral/zuaac.svg",
-      name: "Savesta Vi",
-      username: "@viSaves",
-      text: "I absolutely love how easy it is to make a cover with this. Also, the image itself looks nice.",
-      date: "July 19, 2022",
-      verified: false,
-    },
-  ];
-
   const submitHandler = (data) => {
-    console.log(data);
+    // console.log(data);
     getData(data);
   };
 
   const getData = async (data) => {
     const countQuery = "@tailwindcss OR tailwindcss OR #tailwindcss";
     const username = data?.profileUrl.split(".com/")[1];
-    const usernameMention = "@".concat(username);
+    // const usernameMention = "@".concat(username);
+    const usernameMention = "@notionhq";
     const lang = data?.tweetLang.value ? `lang:${data?.tweetLang.value}` : "";
     const isRetweet = data?.filterRetweet.value ? "" : "-is:retweet";
     const isReply = data?.filterReply.value ? "" : "-is:reply";
@@ -152,12 +158,16 @@ const Dashboard = () => {
 
     const urlProfile = `https://twevvy-be.herokuapp.com/api/v1/twitterProfile/${username}`;
     const urlCount = `https://twevvy-be.herokuapp.com/api/v1/countRecent/notionhq`;
-    const urlTweetRecent = `https://twevvy-be.herokuapp.com/api/v1/tweetRecent`;
-    const urlTweeyIds = `https://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
+    // const urlTweetRecent = `https://twevvy-be.herokuapp.com/api/v1/tweetRecent`;
+    const urlTweetRecent = `http://localhost:5000/api/v1/tweetRecent`;
+    // const urlTweeyIds = `https://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
+    const urlTweeyIds = `http://localhost:5000/api/v1/tweetByIds`;
 
-    // const res = await fetch(urlCount)
-    // const dataJson = await res.json()
-    // console.log(data)
+    const res = await axios.post(urlTweeyIds, {
+      ids: "1556673325329485825,1556989103534706688,1556711531760549892,1556895212030644224",
+    });
+    // const dataJson = await res.json();
+    console.log(res.data);
   };
 
   useEffect(() => {
@@ -176,6 +186,12 @@ const Dashboard = () => {
     register("banSpecific");
     setValue("banSpecific", widget.banSpecific);
   }, []);
+
+  const addCustomTweetHandler = () =>{
+    const twtInput = getValues('customTweet')
+    setCustomTweets(twt=> [...twt, twtInput])
+    setValue('customTweet', "")
+  }
 
   // useEffect(() => {
   //   getData();
@@ -301,17 +317,34 @@ const Dashboard = () => {
                         </div>
                         <div className="text-sm">
                           <p className="font-medium">Custom Tweet</p>
-                          <input
-                            defaultValue={widget.customTweet}
-                            type="text"
-                            {...register("customTweet")}
-                            placeholder="https://twitter.com/"
-                            className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
-                          />
-                          <button className="bg-sky-500 w-full p-2 flex justify-center rounded-sm mt-2 text-white">
-                            <Icon icon="akar-icons:plus" width={18} />
-                          </button>
+                          <div className="flex gap-2 mt-2">
+                            <input
+                              defaultValue={widget.customTweet}
+                              type="text"
+                              {...register("customTweet")}
+                              placeholder="https://twitter.com/"
+                              className="outline-none p-2 flex-grow rounded-sm w-full bg-slate-50 border-[1px] border-gray-300"
+                            />
+                            <button 
+                            onClick={()=>addCustomTweetHandler()}
+                            type="button"
+                            className="bg-sky-500 items-center p-2 flex-1 flex justify-center rounded-sm text-white">
+                              <Icon icon="akar-icons:plus" width={18} />
+                            </button>
+                          </div>
                         </div>
+                        {customTweets.length && (
+                          <div className="flex flex-col gap-4 border-t-[1px] pt-3 border-t-gray-300">
+                            {customTweets.map((tweet) => (
+                              <div className="text-sm truncate font-medium items-center flex gap-1">
+                                <p className="flex-grow bg-sky-100 p-2 rounded text-sky-600">{tweet}</p>
+                                <div className="p-2 text-slate-500 cursor-pointer hover:text-red-600">
+                                  <Icon icon="heroicons-solid:x" width={18} />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="flex flex-col gap-4 mt-3">
