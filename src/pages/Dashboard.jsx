@@ -187,11 +187,16 @@ const Dashboard = () => {
     setValue("banSpecific", widget.banSpecific);
   }, []);
 
-  const addCustomTweetHandler = () =>{
-    const twtInput = getValues('customTweet')
-    setCustomTweets(twt=> [...twt, twtInput])
-    setValue('customTweet', "")
-  }
+  const addCustomTweetHandler = () => {
+    const twtInput = getValues("customTweet");
+    let reg = new RegExp(
+      /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
+    );
+    if (reg.test(twtInput)) {
+      setCustomTweets((twt) => [...twt, twtInput]);
+      setValue("customTweet", "");
+    }
+  };
 
   // useEffect(() => {
   //   getData();
@@ -222,8 +227,8 @@ const Dashboard = () => {
                 <Icon icon="fluent:clipboard-16-regular" width={24} />
               </div>
             </div>
-            <div className=" flex xl:gap-10 gap-6">
-              <div className="flex flex-col gap-3">
+            <div className=" grid grid-cols-5 xl:gap-8 gap-6">
+              <div className="flex col-span-2 flex-col gap-3">
                 <TriggerButton label={"See What They Said"} />
                 <WidgetComponent
                   image="https://lh3.googleusercontent.com/a-/AFdZucp6A_VoFj4qsbHbmCdBHi7Oy2klN3JIiWVEiAs20mc=s96-c"
@@ -233,17 +238,17 @@ const Dashboard = () => {
                   tweets={tweets}
                 />
               </div>
-              <div className="flex gap-3 flex-col">
+              <div className="flex col-span-3 gap-3 flex-col">
                 <div className="bg-sky-100 border-2 font-medium border-sky-500 flex items-center gap-2 rounded text-sky-600 py-2 px-4">
                   <Icon icon="ant-design:info-circle-outlined" width={20} />
                   <p>Save to see widget changes</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="grid grid-cols-5 gap-3">
                   <form
-                    className="col-span-1 shadow-xl rounded p-3 h-fit flex flex-col"
+                    className=" col-span-4 shadow-xl max-w-md w-full rounded p-3 h-fit flex flex-col"
                     onSubmit={handleSubmit(submitHandler)}
                   >
-                    <div className="flex items-center gap-10">
+                    <div className="flex items-center justify-between gap-10">
                       <h3 className="text-lg font-semibold">
                         Customize Your Twevvy
                       </h3>
@@ -325,19 +330,22 @@ const Dashboard = () => {
                               placeholder="https://twitter.com/"
                               className="outline-none p-2 flex-grow rounded-sm w-full bg-slate-50 border-[1px] border-gray-300"
                             />
-                            <button 
-                            onClick={()=>addCustomTweetHandler()}
-                            type="button"
-                            className="bg-sky-500 items-center p-2 flex-1 flex justify-center rounded-sm text-white">
+                            <button
+                              onClick={() => addCustomTweetHandler()}
+                              type="button"
+                              className="bg-sky-500 items-center p-2 flex-1 flex justify-center rounded-sm text-white"
+                            >
                               <Icon icon="akar-icons:plus" width={18} />
                             </button>
                           </div>
                         </div>
                         {customTweets.length && (
-                          <div className="flex flex-col gap-4 border-t-[1px] pt-3 border-t-gray-300">
+                          <div className="flex flex-col gap-4 border-t-[1px] pt-3 border-t-gray-300 w-full">
                             {customTweets.map((tweet) => (
-                              <div className="text-sm truncate font-medium items-center flex gap-1">
-                                <p className="flex-grow bg-sky-100 p-2 rounded text-sky-600">{tweet}</p>
+                              <div className="text-sm font-medium items-center flex gap-1">
+                                <p className="flex-grow bg-sky-100 p-2 truncate rounded text-sky-600">
+                                  {tweet}
+                                </p>
                                 <div className="p-2 text-slate-500 cursor-pointer hover:text-red-600">
                                   <Icon icon="heroicons-solid:x" width={18} />
                                 </div>
@@ -488,7 +496,7 @@ const Dashboard = () => {
                       </div>
                     )}
                   </form>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex col-span-1 flex-col gap-2">
                     <div
                       onClick={() => setIsBasic(true)}
                       className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
