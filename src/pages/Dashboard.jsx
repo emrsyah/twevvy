@@ -346,7 +346,9 @@ const Dashboard = () => {
                                 <p className="flex-grow bg-sky-100 p-2 truncate rounded text-sky-600">
                                   {tweet}
                                 </p>
-                                <div className="p-2 text-slate-500 cursor-pointer hover:text-red-600">
+                                <div className="p-2 text-slate-500 cursor-pointer hover:text-red-600"
+                                onClick={()=>setCustomTweets(tweets => tweets.filter(t => t !== tweet))}
+                                >
                                   <Icon icon="heroicons-solid:x" width={18} />
                                 </div>
                               </div>
