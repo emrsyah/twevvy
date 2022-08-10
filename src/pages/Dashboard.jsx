@@ -22,7 +22,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const widget = {
-  profileUrl: "https://twitter.com/emrsyahh",
+  profileUrl: "https://twitter.com/slackhq",
   buttonLabel: "See What They Said",
   showCount: { label: "Show", value: true },
   tweetAmount: 10,
@@ -87,7 +87,8 @@ const tweets = [
 
 const urlProfile = `https://twevvy-be.herokuapp.com/api/v1/twitterProfile/`;
 const urlCount = `https://twevvy-be.herokuapp.com/api/v1/countRecent/`;
-const urlTweetIds = `http://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
+const urlTweetIds = `https://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
+const urlTweetRecent = `https://twevvy-be.herokuapp.com/api/v1/tweetRecent`;
 
 // TODO Ekstrak Widget Component
 // ! Problem : Data yang object di form gak ke detek - kemungkinan krn masalah yg this object ATAU krn react select ama react hook formnya gak saling support, form filter gak kedetek misalnya gak ngebuka mrk - jadi harus dibuka dulu baru kedetek - kalo langsung save di basci sebelum buka  filter dia gak bakalan ada.
@@ -105,30 +106,32 @@ const Dashboard = () => {
   const user = useRecoilValue(userState);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  // const [widgetAtom, setWidgetAtom] = useRecoilState(widgetState)
   const [customTweets, setCustomTweets] = useState([
     "https://twitter.com/xavierofficials/status/1556895212030644224",
     "https://twitter.com/FarzaTV/status/1556864174185074688",
     "https://twitter.com/YajasSardana/status/1556874006544138240",
   ]);
+  const [widgetData, setWidgetData] = useState({})
+  const [widgetLoading, setWidgetLoading] = useState(true)
+  const [label, setLabel] = useState(widget.buttonLabel)
 
   useEffect(() => {
     setLoading(true);
+    setWidgetLoading(true);
     if (!user) navigate("/", { replace: true });
     registerInput();
+    setLoading(false)
     getTwitterData(widget);
-    setLoading(false);
   }, []);
 
   const submitHandler = (data) => {
-    // console.log(data);
     getTwitterData(data);
   };
 
   const transformData = (data) => {
     const username = data?.profileUrl.split(".com/")[1];
-    // const usernameMention = "@".concat(username);
-    const usernameMention = "@notionhq";
+    const usernameMention = "@".concat(username);
+    // const usernameMention = "@notionhq";
     const lang = data?.tweetLang.value ? `lang:${data?.tweetLang.value}` : "";
     const isRetweet = data?.filterRetweet.value ? "" : "-is:retweet";
     const isReply = data?.filterReply.value ? "" : "-is:reply";
@@ -161,14 +164,38 @@ const Dashboard = () => {
       " ",
       banSpecific
     );
-    return { maxTweet, tweetQuery, username };
+    const tweetIds = data.customTweet.length > 0 && data.customTweet.join(",");
+    return { maxTweet, tweetQuery, username, tweetIds };
   };
 
   const getTwitterData = async (data) => {
-    const countQuery = "@tailwindcss OR tailwindcss OR #tailwindcss";
-    const { maxTweet, tweetQuery, username } = transformData(data);
-    const res = await axios.get(urlCount + "notionhq")
-    console.log(res.data);
+    setWidgetLoading(true)
+    const { maxTweet, tweetQuery, username, tweetIds } = transformData(data);
+    setLabel(data.buttonLabel)
+    let customTweet = []
+    if (tweetIds) {
+      customTweet = await axios.post(urlTweetIds, {
+        ids: tweetIds,
+      });
+    }
+    const recent = await axios.post(urlTweetRecent, {
+      tweetQuery: tweetQuery,
+      maxTweets: maxTweet,
+    });
+    const profile = await axios.get(urlProfile + username);
+    const count = await axios.get(urlCount + username);
+    setWidgetData({
+      image: profile.data.response.data.profile_image_url,
+      verified: profile.data.response.data.verified,
+      name: profile.data.response.data.name,
+      username: profile.data.response.data.username,
+      count: count.data.total,
+    })
+    console.log(customTweet?.data);
+    console.log(recent.data);
+    console.log(profile.data.response.data);
+    console.log(count.data.total);
+    setWidgetLoading(false);
   };
 
   const registerInput = () => {
@@ -234,13 +261,15 @@ const Dashboard = () => {
             </div>
             <div className=" grid grid-cols-5 xl:gap-8 gap-6">
               <div className="flex col-span-2 flex-col gap-3">
-                <TriggerButton label={"See What They Said"} />
+                <TriggerButton label={label} />
                 <WidgetComponent
-                  image="https://lh3.googleusercontent.com/a-/AFdZucp6A_VoFj4qsbHbmCdBHi7Oy2klN3JIiWVEiAs20mc=s96-c"
-                  name="emrsyh"
-                  username="emrsyahh"
-                  count="12.734"
+                  // image="https://lh3.googleusercontent.com/a-/AFdZucp6A_VoFj4qsbHbmCdBHi7Oy2klN3JIiWVEiAs20mc=s96-c"
+                  // name="emrsyh"
+                  // username="emrsyahh"
+                  // count="12.734"
+                  {...widgetData}
                   tweets={tweets}
+                  loading={widgetLoading}
                 />
               </div>
               <div className="flex col-span-3 gap-3 flex-col">
