@@ -10,6 +10,7 @@
   "dependencies": {
     "@headlessui/react": "^1.6.6",
     "axios": "^0.27.2",
+    "dayjs": "^1.11.4",
     "firebase": "^9.9.1",
     "lottie-web": "^5.9.6",
     "react": "^18.0.0",

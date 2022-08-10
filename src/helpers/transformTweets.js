@@ -6,7 +6,8 @@ export default function transformTweets(datas) {
       name: datas.response.includes.users[i]?.name,
       verified: datas.response.includes.users[i]?.verified,
       text: d.text,
-      date: d.created_at,
+      date: d.created_at.split("T")[0],
+      link: `https://twitter.com/${datas.response.includes.users[i]?.username}/status/${d.id}`
     };
   });
   return structured

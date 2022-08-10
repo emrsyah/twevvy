@@ -1,6 +1,8 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import logo from "../assets/twevvyLogo.svg";
+import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 const WidgetComponent = ({
   image,
@@ -11,6 +13,8 @@ const WidgetComponent = ({
   loading,
   verified,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="col-span-1 shadowCard max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-auto scroll">
       {loading ? (
@@ -18,7 +22,12 @@ const WidgetComponent = ({
       ) : (
         <>
           {" "}
-          <div className="flex justify-between items-center">
+          <a
+            href={`https://twitter.com/${username}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex justify-between items-center"
+          >
             <div className="flex cursor-pointer items-center gap-3 xl:gap-4">
               <img
                 src={image}
@@ -42,7 +51,7 @@ const WidgetComponent = ({
             <button className="bg-slate-800 text-white py-[6px] hover:bg-slate-900 px-4 rounded-full font-semibold text-sm">
               Follow
             </button>
-          </div>
+          </a>
           <div className="bg-sky-500 cursor-pointer py-1 font-semibold inter my-3 rounded text-white flex items-center justify-center">
             <p className="text-sm xl:text-[15px] text-center">
               {count} Tweet about {username} this week
@@ -50,7 +59,10 @@ const WidgetComponent = ({
           </div>
           <div className="flex flex-col gap-4 mt-6">
             {tweets?.map((d) => (
-              <div
+              <a
+                href={d.link}
+                target="_blank"
+                rel="noreferrer"
                 key={d.username}
                 className="border-b-[1px] cursor-pointer border-b-gray-300 px-2 pb-2"
               >
@@ -76,18 +88,20 @@ const WidgetComponent = ({
                     </p>
                   </div>
                 </div>
-                <p className="text-sm xl:text-[15px] text-slate-900 mt-3">
+                <p className="text-sm xl:text-[14.5px] text-slate-900 mt-3">
                   {d.text}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-gray-500 mt-[6px]">
-                  <p className=" inter  font-medium">{d.date}</p>
+                  <p className=" inter  font-medium">
+                    {dayjs(d.date).format("MMM DD, YYYY")}
+                  </p>
                   <Icon
                     icon="akar-icons:heart"
                     width="17"
                     className="cursor-pointer hover:text-rose-600"
                   />
                 </div>
-              </div>
+              </a>
             ))}
           </div>
           <div className="flex justify-center text-sm gap-1 mt-4 mb-2">
