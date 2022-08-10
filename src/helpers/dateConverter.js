@@ -5,7 +5,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(isToday)
 
 export default function dateConverter(date){
-  const d = date.split("T")[0]
+  const d = date?.split("T")[0]
   if(dayjs(d).isToday()){
     return dayjs(new Date(date)).fromNow()
   }

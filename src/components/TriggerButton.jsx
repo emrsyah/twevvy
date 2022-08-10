@@ -6,10 +6,10 @@ const TriggerButton = ({label}) => {
     <button className="py-3 w-full px-4 rounded shadowCard flex items-center gap-3">
       <Icon
         icon="ant-design:twitter-outlined"
-        width={22}
+        width={25}
         className="text-sky-500"
       />
-      <p className="font-semibold">{label}</p>
+      <p className="font-semibold text-left">{label}</p>
     </button>
   );
 };

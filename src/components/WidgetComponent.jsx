@@ -1,9 +1,9 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import logo from "../assets/twevvyLogo.svg";
-import dayjs from "dayjs";
 import dateConverter from "../helpers/dateConverter";
 import thousandConverter from "../helpers/thousandConverter";
+import Tweet from "./Tweet";
 
 const WidgetComponent = ({
   image,
@@ -29,22 +29,24 @@ const WidgetComponent = ({
             className="flex justify-between items-center"
           >
             <div className="flex cursor-pointer items-center gap-3 xl:gap-4">
-              <img
-                src={image}
-                className="w-14 h-14 rounded-full"
-                alt="profile"
-              />
+              <div className="w-14 h-14 rounded-full relative">
+                <img
+                  src={image}
+                  className="w-full h-full rounded-full"
+                  alt="profile"
+                />
+                {verified && (
+                  <Icon
+                    icon="codicon:verified-filled"
+                    width={28}
+                    className="text-sky-500 absolute -bottom-1 -right-3"
+                  />
+                )}
+              </div>
               <div className="flex flex-col gap-0">
-                <div className="flex gap-1 items-center">
-                  <h3 className="text-xl font-bold">{name}</h3>
-                  {verified && (
-                    <Icon
-                      icon="codicon:verified-filled"
-                      width={22}
-                      className="text-sky-500"
-                    />
-                  )}
-                </div>
+                <h3 className="text-xl font-bold flex items-center gap-1">
+                  {name}
+                </h3>
                 <p className="text-slate-600 font-medium">@{username}</p>
               </div>
             </div>
@@ -54,8 +56,8 @@ const WidgetComponent = ({
           </a>
           {showCount ? (
             <div className="bg-sky-500 cursor-pointer py-1 font-semibold inter my-3 rounded text-white flex items-center justify-center">
-              <p className="text-sm xl:text-[15px] text-center">
-                {thousandConverter(count)} Tweet about {username} this week
+              <p className="text-sm 2xl:text-[15px] text-center">
+                {thousandConverter(count)} Tweet about {username} <span className="xl:inline hidden">this week</span>
               </p>
             </div>
           ) : (
@@ -64,52 +66,7 @@ const WidgetComponent = ({
           {tweets?.length > 0 ? (
             <div className="flex flex-col gap-4 mt-5">
               {tweets.map((d) => (
-                <a
-                  href={d.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  key={d.link}
-                  className="border-b-[1px] cursor-pointer border-b-gray-300 px-2 pb-2"
-                >
-                  <div className="flex gap-3">
-                    <img
-                      src={d.img}
-                      alt="profile"
-                      className="xl:w-11 xl:h-11 w-10 h-10 rounded-full"
-                    />
-                    <div className="flex flex-col">
-                      <h5 className="font-semibold xl:text-base text-sm flex items-center gap-1">
-                        {d.name}
-                        {d.verified && (
-                          <Icon
-                            icon="codicon:verified-filled"
-                            width={22}
-                            className="text-sky-500"
-                          />
-                        )}
-                      </h5>
-                      <p className="xl:text-sm text-[13px] text-slate-600">
-                        @{d.username}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-sm xl:text-[14.5px] text-slate-900 mt-3">
-                    {d.text}
-                  </p>
-                  <div className="flex items-center gap-3 text-sm text-gray-500 mt-[6px]">
-                    <p className=" inter  font-medium">
-                      {dateConverter(d.date)}
-                    </p>
-                    <div className="flex items-center gap-1">
-                      <Icon
-                        icon="akar-icons:heart"
-                        width="17"
-                        className="cursor-pointer hover:text-rose-600"
-                      />
-                      <p className="font-medium">{thousandConverter(d.like)}</p>
-                    </div>
-                  </div>
-                </a>
+                <Tweet d={d} />
               ))}
             </div>
           ) : (

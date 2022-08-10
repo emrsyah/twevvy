@@ -23,12 +23,12 @@ import transformData from "../helpers/transformData";
 import transformTweets from "../helpers/transformTweets";
 
 const widget = {
-  profileUrl: "https://twitter.com/slackhq",
+  profileUrl: "https://twitter.com/producthunt",
   buttonLabel: "See What They Said",
   showCount: { label: "Show", value: true },
   tweetAmount: 10,
   customTweet: [],
-  filterRetweet: { label: "Include", value: true },
+  filterRetweet: { label: "Dont Include", value: false },
   filterReply: { label: "Include", value: true },
   tweetLang: { label: "English", value: "en" },
   matchGood: { label: "Yes", value: true },
@@ -104,7 +104,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [customTweets, setCustomTweets] = useState([
     "https://twitter.com/xavierofficials/status/1556895212030644224",
-    "https://twitter.com/bhavya_58/status/1556974610247127040",
   ]);
   const [widgetData, setWidgetData] = useState({})
   const [widgetLoading, setWidgetLoading] = useState(true)
@@ -509,7 +508,7 @@ const Dashboard = () => {
                         isBasic && "!text-sky-500"
                       }`}
                     >
-                      <Icon icon="ic:outline-format-list-bulleted" width={20} />
+                      <Icon icon="ic:outline-format-list-bulleted" className="md:inline hidden" width={20} />
                       <p>Basic</p>
                     </div>
                     <div
@@ -518,7 +517,7 @@ const Dashboard = () => {
                         !isBasic && "!text-sky-500"
                       }`}
                     >
-                      <Icon icon="carbon:filter" width={20} />
+                      <Icon icon="carbon:filter" className="md:inline hidden" width={20} />
                       <p>Filter</p>
                     </div>
                   </div>
