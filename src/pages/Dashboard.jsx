@@ -20,6 +20,8 @@ import {
 import { badWords, goodWords } from "../data/queryData";
 import axios from "axios";
 import { toast } from "react-toastify";
+import transformData from "../helpers/transformData";
+import transformTweets from "../helpers/transformTweets";
 
 const widget = {
   profileUrl: "https://twitter.com/slackhq",
@@ -128,46 +130,6 @@ const Dashboard = () => {
     getTwitterData(data);
   };
 
-  const transformData = (data) => {
-    const username = data?.profileUrl.split(".com/")[1];
-    const usernameMention = "@".concat(username);
-    // const usernameMention = "@notionhq";
-    const lang = data?.tweetLang.value ? `lang:${data?.tweetLang.value}` : "";
-    const isRetweet = data?.filterRetweet.value ? "" : "-is:retweet";
-    const isReply = data?.filterReply.value ? "" : "-is:reply";
-    const matchGood = data?.matchGood.value ? goodWords : "";
-    const banBad = data?.banBad.value ? badWords : "";
-    const matchSpecific = data?.matchSpecific.split(",").join(" ");
-    const maxTweet = data?.tweetAmount;
-    const banSpecific =
-      data?.banSpecific !== ""
-        ? data?.banSpecific
-            .split(",")
-            .map((d) => `-${d}`)
-            .join(" ")
-        : "";
-
-    const tweetQuery = "".concat(
-      usernameMention,
-      " ",
-      lang,
-      " ",
-      isRetweet,
-      " ",
-      isReply,
-      " ",
-      matchGood,
-      " ",
-      banBad,
-      " ",
-      matchSpecific,
-      " ",
-      banSpecific
-    );
-    const tweetIds = data.customTweet.length > 0 && data.customTweet.join(",");
-    return { maxTweet, tweetQuery, username, tweetIds };
-  };
-
   const getTwitterData = async (data) => {
     setWidgetLoading(true)
     const { maxTweet, tweetQuery, username, tweetIds } = transformData(data);
@@ -184,15 +146,17 @@ const Dashboard = () => {
     });
     const profile = await axios.get(urlProfile + username);
     const count = await axios.get(urlCount + username);
+    const structuredTweets = transformTweets(recent.data)
     setWidgetData({
       image: profile.data.response.data.profile_image_url,
       verified: profile.data.response.data.verified,
       name: profile.data.response.data.name,
       username: profile.data.response.data.username,
       count: count.data.total,
+      tweets: structuredTweets,
     })
     console.log(customTweet?.data);
-    console.log(recent.data);
+    console.log(transformTweets(recent.data));
     console.log(profile.data.response.data);
     console.log(count.data.total);
     setWidgetLoading(false);
@@ -268,7 +232,7 @@ const Dashboard = () => {
                   // username="emrsyahh"
                   // count="12.734"
                   {...widgetData}
-                  tweets={tweets}
+                  // tweets={tweets}
                   loading={widgetLoading}
                 />
               </div>

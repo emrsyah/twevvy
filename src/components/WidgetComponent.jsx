@@ -49,7 +49,7 @@ const WidgetComponent = ({
             </p>
           </div>
           <div className="flex flex-col gap-4 mt-6">
-            {tweets.map((d) => (
+            {tweets?.map((d) => (
               <div
                 key={d.username}
                 className="border-b-[1px] cursor-pointer border-b-gray-300 px-2 pb-2"
