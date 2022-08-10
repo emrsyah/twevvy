@@ -28,7 +28,7 @@ const WidgetComponent = ({
             rel="noreferrer"
             className="flex lg:flex-row flex-col justify-between lg:items-center"
           >
-            <div className="flex cursor-pointer items-center gap-3 xl:gap-4">
+            <div className="flex cursor-pointer items-center gap-4">
               <div className="w-14 h-14 rounded-full relative">
                 <img
                   src={image}
@@ -39,7 +39,7 @@ const WidgetComponent = ({
                   <Icon
                     icon="codicon:verified-filled"
                     width={28}
-                    className="text-sky-500 absolute -bottom-1 -right-3"
+                    className="text-sky-500 absolute -bottom-[2px] -right-3"
                   />
                 )}
               </div>
@@ -55,7 +55,7 @@ const WidgetComponent = ({
             </button>
           </a>
           {showCount ? (
-            <div className="bg-sky-500 cursor-pointer py-1 font-semibold inter my-3 rounded text-white flex items-center justify-center">
+            <div className="bg-sky-500 cursor-pointer py-[6px] font-semibold inter my-2 lg:my-3 rounded text-white flex items-center justify-center">
               <p className="text-sm 2xl:text-[15px] text-center">
                 {thousandConverter(count)} Tweet about {username} <span className="xl:inline hidden">this week</span>
               </p>

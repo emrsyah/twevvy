@@ -4,12 +4,11 @@ import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "../atoms/userAtom";
 import { useNavigate } from "react-router-dom";
 import TriggerButton from "../components/TriggerButton";
 import WidgetComponent from "../components/WidgetComponent";
-import { widgetState } from "../atoms/widgetAtom";
 import {
   badWordOptions,
   countOptions,
@@ -21,6 +20,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import transformData from "../helpers/transformData";
 import transformTweets from "../helpers/transformTweets";
+import CopyCode from "../components/CopyCode";
 
 const widget = {
   profileUrl: "https://twitter.com/producthunt",
@@ -107,6 +107,7 @@ const Dashboard = () => {
   const [widgetData, setWidgetData] = useState({});
   const [widgetLoading, setWidgetLoading] = useState(true);
   const [label, setLabel] = useState(widget.buttonLabel);
+  const [prevProfileUrl, setPrevProfileUrl] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -115,6 +116,7 @@ const Dashboard = () => {
     registerInput();
     setLoading(false);
     getTwitterData(widget);
+    setPrevProfileUrl(widget.profileUrl);
   }, []);
 
   const submitHandler = (data) => {
@@ -140,9 +142,13 @@ const Dashboard = () => {
         tweetQuery: tweetQuery,
         maxTweets: maxTweet,
       });
-      if(profile.data.response.errors && profile.data.response.errors[0].title === "Not Found Error"){
-        throw new Error("Could not find")
+      if (
+        profile.data.response.errors &&
+        profile.data.response.errors[0].title === "Not Found Error"
+      ) {
+        throw new Error("Could not find");
       }
+      console.log("logged");
       let structuredTweets = transformTweets(recent?.data);
       if (customTweet.length > 0) {
         structuredTweets = customTweet.concat(structuredTweets);
@@ -159,9 +165,12 @@ const Dashboard = () => {
         tweets: structuredTweets,
         showCount: showCount,
       });
+      setPrevProfileUrl(data.profileUrl);
       setWidgetLoading(false);
     } catch (err) {
       console.error(err);
+      toast.error("Could not find twitter username");
+      setValue("profileUrl", prevProfileUrl);
       setWidgetLoading(false);
     }
   };
@@ -213,20 +222,15 @@ const Dashboard = () => {
         <>
           <Navbar />
           <div className="containerKu my-8 2xl:px-20 xl:px-16 px-0">
-            <div className="shadow-md py-2 px-4 flex items-center justify-between rounded mb-5">
-              <p className="text-[15px] truncate text-slate-700">
-                {`
-          <script
-            src="https://twevvy.vercel.app/scripts/embed.min.js"
-            async
-            defer
-            data-widget-id="95qietz8"
-          ></script>`}
-              </p>
-              <div className="p-1 border-sky-500 border-[1.5px] text-sky-500 rounded hover:bg-sky-100 cursor-pointer">
-                <Icon icon="fluent:clipboard-16-regular" width={24} />
-              </div>
-            </div>
+            <CopyCode
+              code={`
+<script
+  src="https://twevvy.vercel.app/scripts/embed.min.js"
+  async
+  defer
+  data-widget-id="95qietz8"
+></script>`}
+            />
             <div className=" grid grid-cols-5 xl:gap-8 gap-6">
               <div className="flex col-span-2 flex-col gap-3">
                 <TriggerButton label={label} />
@@ -255,7 +259,7 @@ const Dashboard = () => {
                         Customize Your Twevvy
                       </h3>
                       <button
-                        disabled={!isDirty || !isValid}
+                        disabled={!isDirty || !isValid || widgetLoading}
                         type="submit"
                         className={`bg-sky-500 flex items-center gap-2 text-white py-1 px-3 font-medium rounded ${
                           (!isDirty || !isValid) && "bg-sky-300"
