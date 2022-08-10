@@ -80,7 +80,6 @@ const tweets = [
   },
 ];
 
-
 const urlProfile = `https://twevvy-be.herokuapp.com/api/v1/twitterProfile/`;
 const urlCount = `https://twevvy-be.herokuapp.com/api/v1/countRecent/`;
 const urlTweetIds = `https://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
@@ -105,16 +104,16 @@ const Dashboard = () => {
   const [customTweets, setCustomTweets] = useState([
     "https://twitter.com/xavierofficials/status/1556895212030644224",
   ]);
-  const [widgetData, setWidgetData] = useState({})
-  const [widgetLoading, setWidgetLoading] = useState(true)
-  const [label, setLabel] = useState(widget.buttonLabel)
+  const [widgetData, setWidgetData] = useState({});
+  const [widgetLoading, setWidgetLoading] = useState(true);
+  const [label, setLabel] = useState(widget.buttonLabel);
 
   useEffect(() => {
     setLoading(true);
     setWidgetLoading(true);
     if (!user) navigate("/", { replace: true });
     registerInput();
-    setLoading(false)
+    setLoading(false);
     getTwitterData(widget);
   }, []);
 
@@ -123,40 +122,48 @@ const Dashboard = () => {
   };
 
   const getTwitterData = async (data) => {
-    setWidgetLoading(true)
-    const { maxTweet, tweetQuery, username, tweetIds, showCount } = transformData({...data, customTweets: customTweets});
-    setLabel(data.buttonLabel)
-    let customTweet = []
-    if (tweetIds) {
-      customTweet = await axios.post(urlTweetIds, {
-        ids: tweetIds,
+    try {
+      setWidgetLoading(true);
+      const { maxTweet, tweetQuery, username, tweetIds, showCount } =
+        transformData({ ...data, customTweets: customTweets });
+      setLabel(data.buttonLabel);
+      let customTweet = [];
+      const profile = await axios.get(urlProfile + username);
+      const count = await axios.get(urlCount + username);
+      if (tweetIds) {
+        customTweet = await axios.post(urlTweetIds, {
+          ids: tweetIds,
+        });
+        customTweet = transformTweets(customTweet?.data);
+      }
+      const recent = await axios.post(urlTweetRecent, {
+        tweetQuery: tweetQuery,
+        maxTweets: maxTweet,
       });
-      customTweet = transformTweets(customTweet?.data)
+      if(profile.data.response.errors && profile.data.response.errors[0].title === "Not Found Error"){
+        throw new Error("Could not find")
+      }
+      let structuredTweets = transformTweets(recent?.data);
+      if (customTweet.length > 0) {
+        structuredTweets = customTweet.concat(structuredTweets);
+      }
+      setWidgetData({
+        image: profile.data.response.data.profile_image_url.replace(
+          "normal.jpg",
+          "bigger.jpg"
+        ),
+        verified: profile.data.response.data.verified,
+        name: profile.data.response.data.name,
+        username: profile.data.response.data.username,
+        count: count.data.total,
+        tweets: structuredTweets,
+        showCount: showCount,
+      });
+      setWidgetLoading(false);
+    } catch (err) {
+      console.error(err);
+      setWidgetLoading(false);
     }
-    const recent = await axios.post(urlTweetRecent, {
-      tweetQuery: tweetQuery,
-      maxTweets: maxTweet,
-    });
-    const profile = await axios.get(urlProfile + username);
-    const count = await axios.get(urlCount + username);
-    let structuredTweets = transformTweets(recent?.data)
-    if(customTweet.length > 0){
-      structuredTweets = customTweet.concat(structuredTweets)
-      // console.log(structuredTweets)
-    }
-    setWidgetData({
-      image: profile.data.response.data.profile_image_url.replace('normal.jpg', 'bigger.jpg'),
-      verified: profile.data.response.data.verified,
-      name: profile.data.response.data.name,
-      username: profile.data.response.data.username,
-      count: count.data.total,
-      tweets: structuredTweets,
-      showCount: showCount
-    })
-    // console.log(transformTweets(recent.data));
-    // console.log(profile.data.response.data);
-    // console.log(count.data.total);
-    setWidgetLoading(false);
   };
 
   const registerInput = () => {
@@ -508,7 +515,11 @@ const Dashboard = () => {
                         isBasic && "!text-sky-500"
                       }`}
                     >
-                      <Icon icon="ic:outline-format-list-bulleted" className="md:inline hidden" width={20} />
+                      <Icon
+                        icon="ic:outline-format-list-bulleted"
+                        className="md:inline hidden"
+                        width={20}
+                      />
                       <p>Basic</p>
                     </div>
                     <div
@@ -517,7 +528,11 @@ const Dashboard = () => {
                         !isBasic && "!text-sky-500"
                       }`}
                     >
-                      <Icon icon="carbon:filter" className="md:inline hidden" width={20} />
+                      <Icon
+                        icon="carbon:filter"
+                        className="md:inline hidden"
+                        width={20}
+                      />
                       <p>Filter</p>
                     </div>
                   </div>

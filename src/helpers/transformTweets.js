@@ -4,6 +4,7 @@ export default function transformTweets(datas) {
   const structured = datas.response.data.map((d, i) => {
     const userPosition = datas.response.includes.users.findIndex(u=>u.id === d.author_id)
     return {
+      id: d.id,
       username: datas.response.includes.users[userPosition]?.username,
       img: datas.response.includes.users[userPosition]?.profile_image_url.replace('normal.jpg', 'bigger.jpg'),
       name: datas.response.includes.users[userPosition]?.name,

@@ -3,7 +3,7 @@ import React from "react";
 import dateConverter from "../helpers/dateConverter";
 import thousandConverter from "../helpers/thousandConverter";
 
-const Tweet = ({d}) => {
+const Tweet = ({ d }) => {
   return (
     <a
       href={d.link}
@@ -19,14 +19,16 @@ const Tweet = ({d}) => {
         />
         <div className="flex flex-col">
           <h5 className="font-semibold xl:text-base text-sm flex items-center gap-1">
-            {d.name}
-            {d.verified && (
-              <Icon
-                icon="codicon:verified-filled"
-                width={22}
-                className="text-sky-500"
-              />
-            )}
+            <>
+              {d.name}
+              {d.verified && (
+                <Icon
+                  icon="codicon:verified-filled"
+                  width={22}
+                  className="text-sky-500"
+                />
+              )}
+            </>
           </h5>
           <p className="xl:text-sm text-[13px] text-slate-600">@{d.username}</p>
         </div>

@@ -15,18 +15,18 @@ const WidgetComponent = ({
   verified,
   showCount,
 }) => {
+  // console.log(image)
   return (
-    <div className="col-span-1 shadowCard max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-auto scroll">
+    <div className="col-span-1 shadowCard max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-y-auto overflow-x-hidden scroll">
       {loading ? (
         <div>Loading...</div>
       ) : (
         <>
-          {" "}
           <a
             href={`https://twitter.com/${username}`}
             target="_blank"
             rel="noreferrer"
-            className="flex justify-between items-center"
+            className="flex lg:flex-row flex-col justify-between lg:items-center"
           >
             <div className="flex cursor-pointer items-center gap-3 xl:gap-4">
               <div className="w-14 h-14 rounded-full relative">
@@ -50,7 +50,7 @@ const WidgetComponent = ({
                 <p className="text-slate-600 font-medium">@{username}</p>
               </div>
             </div>
-            <button className="bg-slate-800 text-white py-[6px] hover:bg-slate-900 px-4 rounded-full font-semibold text-sm">
+            <button className="bg-slate-800 mt-3 w-full rounded-md lg:mt-0 lg:w-fit text-white py-[6px] hover:bg-slate-900 px-4 lg:rounded-full font-semibold text-sm">
               Follow
             </button>
           </a>
@@ -66,7 +66,7 @@ const WidgetComponent = ({
           {tweets?.length > 0 ? (
             <div className="flex flex-col gap-4 mt-5">
               {tweets.map((d) => (
-                <Tweet d={d} />
+                <Tweet d={d} key={d.id} />
               ))}
             </div>
           ) : (
