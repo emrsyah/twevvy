@@ -19,6 +19,7 @@ import {
 } from "../data/optionData";
 import { badWords, goodWords } from "../data/queryData";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const widget = {
   profileUrl: "https://twitter.com/emrsyahh",
@@ -48,7 +49,7 @@ const tweets = [
     img: "https://avatars.dicebear.com/api/adventurer-neutral/ries.svg",
     name: "NathanielB",
     username: "@nathb",
-    text: "I absolutely love how easy it is to make a cover with this. Also, the image itself looks nice.",
+    text: "Hold up, aint you nathaniel b🤨",
     date: "July 23, 2022",
     verified: true,
   },
@@ -84,6 +85,10 @@ const tweets = [
 //   `Bearer ${import.meta.env.VITE_REACT_APP_BEARER_TOKEN}`
 // );
 
+const urlProfile = `https://twevvy-be.herokuapp.com/api/v1/twitterProfile/`;
+const urlCount = `https://twevvy-be.herokuapp.com/api/v1/countRecent/`;
+const urlTweetIds = `http://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
+
 // TODO Ekstrak Widget Component
 // ! Problem : Data yang object di form gak ke detek - kemungkinan krn masalah yg this object ATAU krn react select ama react hook formnya gak saling support, form filter gak kedetek misalnya gak ngebuka mrk - jadi harus dibuka dulu baru kedetek - kalo langsung save di basci sebelum buka  filter dia gak bakalan ada.
 
@@ -110,16 +115,17 @@ const Dashboard = () => {
   useEffect(() => {
     setLoading(true);
     if (!user) navigate("/", { replace: true });
+    registerInput();
+    getTwitterData(widget);
     setLoading(false);
   }, []);
 
   const submitHandler = (data) => {
     // console.log(data);
-    getData(data);
+    getTwitterData(data);
   };
 
-  const getData = async (data) => {
-    const countQuery = "@tailwindcss OR tailwindcss OR #tailwindcss";
+  const transformData = (data) => {
     const username = data?.profileUrl.split(".com/")[1];
     // const usernameMention = "@".concat(username);
     const usernameMention = "@notionhq";
@@ -155,22 +161,17 @@ const Dashboard = () => {
       " ",
       banSpecific
     );
+    return { maxTweet, tweetQuery, username };
+  };
 
-    const urlProfile = `https://twevvy-be.herokuapp.com/api/v1/twitterProfile/${username}`;
-    const urlCount = `https://twevvy-be.herokuapp.com/api/v1/countRecent/notionhq`;
-    // const urlTweetRecent = `https://twevvy-be.herokuapp.com/api/v1/tweetRecent`;
-    const urlTweetRecent = `http://localhost:5000/api/v1/tweetRecent`;
-    // const urlTweeyIds = `https://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
-    const urlTweeyIds = `http://localhost:5000/api/v1/tweetByIds`;
-
-    const res = await axios.post(urlTweeyIds, {
-      ids: "1556673325329485825,1556989103534706688,1556711531760549892,1556895212030644224",
-    });
-    // const dataJson = await res.json();
+  const getTwitterData = async (data) => {
+    const countQuery = "@tailwindcss OR tailwindcss OR #tailwindcss";
+    const { maxTweet, tweetQuery, username } = transformData(data);
+    const res = await axios.get(urlCount + "notionhq")
     console.log(res.data);
   };
 
-  useEffect(() => {
+  const registerInput = () => {
     register("filterRetweet");
     setValue("filterRetweet", widget.filterRetweet);
     register("filterReply");
@@ -185,22 +186,26 @@ const Dashboard = () => {
     setValue("matchSpecific", widget.matchSpecific);
     register("banSpecific");
     setValue("banSpecific", widget.banSpecific);
-  }, []);
+  };
 
   const addCustomTweetHandler = () => {
     const twtInput = getValues("customTweet");
-    let reg = new RegExp(
-      /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
+    let regValidUrl = new RegExp(/(?<=https:\/\/twitter.com\/).*$/);
+    let regExtract = new RegExp(
+      /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/
     );
-    if (reg.test(twtInput)) {
-      setCustomTweets((twt) => [...twt, twtInput]);
-      setValue("customTweet", "");
+    if (!regValidUrl.test(twtInput)) {
+      toast.error("URL is Invalid", { autoClose: 1500 });
+      return;
     }
+    console.log(
+      "https://twitter.com/DailyDevTips1/status/1556963228344877058".match(
+        regExtract
+      )
+    );
+    setCustomTweets((twt) => [...twt, twtInput]);
+    setValue("customTweet", "");
   };
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
 
   return (
     <>
@@ -339,15 +344,23 @@ const Dashboard = () => {
                             </button>
                           </div>
                         </div>
-                        {customTweets.length && (
+                        {customTweets.length > 0 && (
                           <div className="flex flex-col gap-4 border-t-[1px] pt-3 border-t-gray-300 w-full">
                             {customTweets.map((tweet) => (
-                              <div className="text-sm font-medium items-center flex gap-1">
+                              <div
+                                key={tweet}
+                                className="text-sm font-medium items-center flex gap-1"
+                              >
                                 <p className="flex-grow bg-sky-100 p-2 truncate rounded text-sky-600">
                                   {tweet}
                                 </p>
-                                <div className="p-2 text-slate-500 cursor-pointer hover:text-red-600"
-                                onClick={()=>setCustomTweets(tweets => tweets.filter(t => t !== tweet))}
+                                <div
+                                  className="p-2 text-slate-500 cursor-pointer hover:text-red-600"
+                                  onClick={() =>
+                                    setCustomTweets((tweets) =>
+                                      tweets.filter((t) => t !== tweet)
+                                    )
+                                  }
                                 >
                                   <Icon icon="heroicons-solid:x" width={18} />
                                 </div>
