@@ -17,7 +17,6 @@ import {
   includeOptions,
   langOption,
 } from "../data/optionData";
-import { badWords, goodWords } from "../data/queryData";
 import axios from "axios";
 import { toast } from "react-toastify";
 import transformData from "../helpers/transformData";
@@ -81,11 +80,6 @@ const tweets = [
   },
 ];
 
-// const myHeaders = new Headers();
-// myHeaders.append(
-//   "Authorization",
-//   `Bearer ${import.meta.env.VITE_REACT_APP_BEARER_TOKEN}`
-// );
 
 const urlProfile = `https://twevvy-be.herokuapp.com/api/v1/twitterProfile/`;
 const urlCount = `https://twevvy-be.herokuapp.com/api/v1/countRecent/`;
@@ -110,8 +104,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [customTweets, setCustomTweets] = useState([
     "https://twitter.com/xavierofficials/status/1556895212030644224",
-    "https://twitter.com/FarzaTV/status/1556864174185074688",
-    "https://twitter.com/YajasSardana/status/1556874006544138240",
+    "https://twitter.com/bhavya_58/status/1556974610247127040",
   ]);
   const [widgetData, setWidgetData] = useState({})
   const [widgetLoading, setWidgetLoading] = useState(true)
@@ -132,13 +125,14 @@ const Dashboard = () => {
 
   const getTwitterData = async (data) => {
     setWidgetLoading(true)
-    const { maxTweet, tweetQuery, username, tweetIds } = transformData(data);
+    const { maxTweet, tweetQuery, username, tweetIds, showCount } = transformData({...data, customTweets: customTweets});
     setLabel(data.buttonLabel)
     let customTweet = []
     if (tweetIds) {
       customTweet = await axios.post(urlTweetIds, {
         ids: tweetIds,
       });
+      customTweet = transformTweets(customTweet?.data)
     }
     const recent = await axios.post(urlTweetRecent, {
       tweetQuery: tweetQuery,
@@ -146,19 +140,23 @@ const Dashboard = () => {
     });
     const profile = await axios.get(urlProfile + username);
     const count = await axios.get(urlCount + username);
-    const structuredTweets = transformTweets(recent.data)
+    let structuredTweets = transformTweets(recent?.data)
+    if(customTweet.length > 0){
+      structuredTweets = customTweet.concat(structuredTweets)
+      // console.log(structuredTweets)
+    }
     setWidgetData({
-      image: profile.data.response.data.profile_image_url,
+      image: profile.data.response.data.profile_image_url.replace('normal.jpg', 'bigger.jpg'),
       verified: profile.data.response.data.verified,
       name: profile.data.response.data.name,
       username: profile.data.response.data.username,
       count: count.data.total,
       tweets: structuredTweets,
+      showCount: showCount
     })
-    console.log(customTweet?.data);
-    console.log(transformTweets(recent.data));
-    console.log(profile.data.response.data);
-    console.log(count.data.total);
+    // console.log(transformTweets(recent.data));
+    // console.log(profile.data.response.data);
+    // console.log(count.data.total);
     setWidgetLoading(false);
   };
 

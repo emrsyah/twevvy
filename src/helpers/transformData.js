@@ -1,6 +1,9 @@
 import { badWords, goodWords } from "../data/queryData";
 
 export default function transformData(data) {
+  let regExtract = new RegExp(
+    /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/
+  );
   const username = data?.profileUrl.split(".com/")[1];
   const usernameMention = "@".concat(username);
   // const usernameMention = "@notionhq";
@@ -36,6 +39,7 @@ export default function transformData(data) {
     " ",
     banSpecific
   );
-  const tweetIds = data.customTweet.length > 0 && data.customTweet.join(",");
-  return { maxTweet, tweetQuery, username, tweetIds };
+  const tweetIds = data.customTweets.length > 0 && data.customTweets.map(d=>d.match(regExtract)[3]).join(",");
+  const showCount = data.showCount.value;
+  return { maxTweet, tweetQuery, username, tweetIds, showCount };
 }

@@ -29,7 +29,7 @@ export const langOption = [
   { value: "hu", label: "Hungarian" },
   { value: "hr", label: "Croatian" },
   { value: "th", label: "Thai" },
-  { value: "in", label: "Indonesian" },
+  { value: "id", label: "Indonesian" },
   { value: "pl", label: "Polish" },
   { value: "cs", label: "Czech" },
   { value: "it", label: "Italian" },
