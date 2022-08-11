@@ -148,7 +148,7 @@ const Dashboard = () => {
       ) {
         throw new Error("Could not find");
       }
-      console.log("logged");
+      // console.log("logged");
       let structuredTweets = transformTweets(recent?.data);
       if (customTweet.length > 0) {
         structuredTweets = customTweet.concat(structuredTweets);

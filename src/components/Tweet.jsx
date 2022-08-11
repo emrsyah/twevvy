@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react";
 import React from "react";
 import dateConverter from "../helpers/dateConverter";
 import thousandConverter from "../helpers/thousandConverter";
+import CustomRender from "./CustomRender";
 
 const Tweet = ({ d }) => {
   return (
@@ -34,7 +35,8 @@ const Tweet = ({ d }) => {
         </div>
       </div>
       <p className="text-sm xl:text-[14.5px] text-slate-900 mt-[10px]">
-        {d.text}
+        {/* {d.text} */}
+        <CustomRender text={d.text.replace("\n", "  ")} />
       </p>
       <div className="flex items-center gap-3 text-sm text-gray-500 mt-[6px]">
         <p className=" inter  font-medium">{dateConverter(d?.date)}</p>

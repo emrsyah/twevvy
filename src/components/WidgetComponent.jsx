@@ -39,7 +39,7 @@ const WidgetComponent = ({
                   <Icon
                     icon="codicon:verified-filled"
                     width={28}
-                    className="text-sky-500 absolute -bottom-[2px] -right-3"
+                    className="text-sky-500 absolute -bottom-[3px] -right-3"
                   />
                 )}
               </div>
@@ -55,11 +55,11 @@ const WidgetComponent = ({
             </button>
           </a>
           {showCount ? (
-            <div className="bg-sky-500 cursor-pointer py-[6px] font-semibold inter my-2 lg:my-3 rounded text-white flex items-center justify-center">
+            <a href={`https://twitter.com/intent/tweet?text=I love how amazing and cool @${username} is&hashtags=${username}`} target="_blank" className="bg-sky-500 cursor-pointer py-[6px] font-semibold inter my-2 lg:my-3 rounded text-white flex items-center justify-center">
               <p className="text-sm 2xl:text-[15px] text-center">
                 {thousandConverter(count)} Tweet about {username} <span className="xl:inline hidden">this week</span>
               </p>
-            </div>
+            </a>
           ) : (
             <div className="border-t-[1.5px] border-t-gray-300 mt-4"></div>
           )}
