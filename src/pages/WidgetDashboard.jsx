@@ -22,7 +22,8 @@ import transformData from "../helpers/transformData";
 import transformTweets from "../helpers/transformTweets";
 import CopyCode from "../components/CopyCode";
 import { useParams } from "react-router";
-
+import { doc, getDoc } from "firebase/firestore";
+import { firestoreDb } from "../../firebase";
 
 const widget = {
   profileUrl: "https://twitter.com/producthunt",
@@ -63,11 +64,10 @@ const WidgetDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [customTweets, setCustomTweets] = useState([
     "https://twitter.com/xavierofficials/status/1556895212030644224",
-    "https://twitter.com/xavierofficials/status/155689521203064422",
   ]);
   const [widgetData, setWidgetData] = useState({});
   const [widgetLoading, setWidgetLoading] = useState(true);
-  const [label, setLabel] = useState(widget.buttonLabel);
+  const [label, setLabel] = useState();
   const [prevProfileUrl, setPrevProfileUrl] = useState("");
 
   useEffect(() => {
@@ -76,9 +76,38 @@ const WidgetDashboard = () => {
     if (!user) navigate("/", { replace: true });
     registerInput();
     setLoading(false);
-    getTwitterData(widget);
-    setPrevProfileUrl(widget.profileUrl);
+    getWidget().then(data=>{
+        // console.log(data.data())
+        getTwitterData(data.data());
+        setPrevProfileUrl(data.data().profileUrl);
+    })
   }, []);
+
+  const getWidget = async () => {
+    const docRef = doc(firestoreDb, "widgets", id);
+    const docSnap = await getDoc(docRef);
+
+    // Handling error dan exception
+    if (!docSnap.exists()) {
+      console.error("Logs doesnt exist");
+      navigate("/dashboard", { replace: true });
+      return;
+    }
+
+    if (docSnap.data().userId !== user.userId) {
+      console.error("Logs doesnt exist");
+      navigate("/dashboard", { replace: true });
+      return;
+    }
+
+    return docSnap
+    // setLog(docSnap.data());
+    // setDeletedLog({
+    //   id: id,
+    //   labels: docSnap.data().labels ? docSnap.data().labels : [],
+    // });
+    // setStatus("finished");
+  };
 
   const submitHandler = (data) => {
     getTwitterData(data);
@@ -107,7 +136,7 @@ const WidgetDashboard = () => {
         profile.data.response.errors &&
         profile.data.response.errors[0].title === "Not Found Error"
       ) {
-        console.log(profile.data.response.errors.resource_id)
+        console.log(profile.data.response.errors.resource_id);
         throw new Error("Could not find");
       }
       // console.log("logged");
