@@ -1,6 +1,5 @@
 export default function transformTweets(datas) {
-  // console.log(datas)
-  if(datas.response?.meta?.result_count === 0) return []
+  if(datas.response?.meta?.result_count === 0 || datas?.response?.data?.length === undefined) return []
   const structured = datas.response.data.map((d, i) => {
     const userPosition = datas.response.includes.users.findIndex(u=>u.id === d.author_id)
     return {
