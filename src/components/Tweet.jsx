@@ -34,10 +34,10 @@ const Tweet = ({ d }) => {
           <p className="xl:text-sm text-[13px] text-slate-600">@{d.username}</p>
         </div>
       </div>
-      <p className="text-sm xl:text-[14.5px] text-slate-900 mt-[10px]">
+      <div className="text-sm xl:text-[14.5px] text-slate-900 mt-[10px]">
         {/* {d.text} */}
         <CustomRender text={d.text.replace("\n", "  ")} />
-      </p>
+      </div>
       <div className="flex items-center gap-3 text-sm text-gray-500 mt-[6px]">
         <p className=" inter  font-medium">{dateConverter(d?.date)}</p>
         <div className="flex items-center gap-1">

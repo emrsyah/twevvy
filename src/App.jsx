@@ -11,6 +11,7 @@ import Lottie from "lottie-web";
 import lottieJson from './assets/62424-gradient-loader-spinner-light-blue.json'
 import logo from './assets/twevvyNavLogo.svg'
 import Dashboard from "./pages/Dashboard";
+import WidgetDashboard from "./pages/WidgetDashboard";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -53,7 +54,8 @@ function App() {
         ) : (
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/" element={<Dashboard />} />
+            <Route path="/dashboard/:id" element={<WidgetDashboard />} />
           </Routes>
         )}
       </BrowserRouter>

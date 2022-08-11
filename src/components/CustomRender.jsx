@@ -20,7 +20,7 @@ const CustomRender = ({ text }) => {
         </span>
       );
     } else {
-      parts[i] = <> {parts[i]} </>;
+      parts[i] = <span key={i}>{" "}{parts[i]}{" "}</span>;
     }
   }
   // console.log(parts)
