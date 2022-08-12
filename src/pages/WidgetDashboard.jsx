@@ -22,31 +22,28 @@ import transformData from "../helpers/transformData";
 import transformTweets from "../helpers/transformTweets";
 import CopyCode from "../components/CopyCode";
 import { useParams } from "react-router";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { firestoreDb } from "../../firebase";
 
-const widget = {
-  profileUrl: "https://twitter.com/producthunt",
-  buttonLabel: "See What They Said",
-  showCount: { label: "Show", value: true },
-  tweetAmount: 10,
-  customTweet: [],
-  filterRetweet: { label: "Dont Include", value: false },
-  filterReply: { label: "Include", value: true },
-  tweetLang: { label: "English", value: "en" },
-  matchGood: { label: "Yes", value: true },
-  banBad: { label: "Filter", value: true },
-  matchSpecific: "",
-  banSpecific: "",
-};
+// const widget = {
+//   profileUrl: "https://twitter.com/producthunt",
+//   buttonLabel: "See What They Said",
+//   showCount: { label: "Show", value: true },
+//   tweetAmount: 10,
+//   customTweet: [],
+//   filterRetweet: { label: "Dont Include", value: false },
+//   filterReply: { label: "Include", value: true },
+//   tweetLang: { label: "English", value: "en" },
+//   matchGood: { label: "Yes", value: true },
+//   banBad: { label: "Filter", value: true },
+//   matchSpecific: "",
+//   banSpecific: "",
+// };
 
 const urlProfile = `https://twevvy-be.herokuapp.com/api/v1/twitterProfile/`;
 const urlCount = `https://twevvy-be.herokuapp.com/api/v1/countRecent/`;
 const urlTweetIds = `https://twevvy-be.herokuapp.com/api/v1/tweetByIds`;
 const urlTweetRecent = `https://twevvy-be.herokuapp.com/api/v1/tweetRecent`;
-
-// TODO Ekstrak Widget Component
-// ! Problem : Data yang object di form gak ke detek - kemungkinan krn masalah yg this object ATAU krn react select ama react hook formnya gak saling support, form filter gak kedetek misalnya gak ngebuka mrk - jadi harus dibuka dulu baru kedetek - kalo langsung save di basci sebelum buka  filter dia gak bakalan ada.
 
 const WidgetDashboard = () => {
   const {
@@ -69,18 +66,20 @@ const WidgetDashboard = () => {
   const [widgetLoading, setWidgetLoading] = useState(true);
   const [label, setLabel] = useState();
   const [prevProfileUrl, setPrevProfileUrl] = useState("");
+  const [widgetForm, setWidgetForm] = useState();
 
   useEffect(() => {
     setLoading(true);
     setWidgetLoading(true);
     if (!user) navigate("/", { replace: true });
-    registerInput();
-    setLoading(false);
-    getWidget().then(data=>{
-        // console.log(data.data())
-        getTwitterData(data.data());
-        setPrevProfileUrl(data.data().profileUrl);
-    })
+    getWidget().then((data) => {
+      setWidgetForm(data.data());
+      // console.log(widgetForm)
+      registerInput(data.data());
+      setLoading(false);
+      getTwitterData(data.data());
+      setPrevProfileUrl(data.data().profileUrl);
+    });
   }, []);
 
   const getWidget = async () => {
@@ -100,13 +99,7 @@ const WidgetDashboard = () => {
       return;
     }
 
-    return docSnap
-    // setLog(docSnap.data());
-    // setDeletedLog({
-    //   id: id,
-    //   labels: docSnap.data().labels ? docSnap.data().labels : [],
-    // });
-    // setStatus("finished");
+    return docSnap;
   };
 
   const submitHandler = (data) => {
@@ -139,7 +132,6 @@ const WidgetDashboard = () => {
         console.log(profile.data.response.errors.resource_id);
         throw new Error("Could not find");
       }
-      // console.log("logged");
       let structuredTweets = transformTweets(recent?.data);
       if (customTweet.length > 0) {
         structuredTweets = customTweet.concat(structuredTweets);
@@ -157,6 +149,7 @@ const WidgetDashboard = () => {
         showCount: showCount,
       });
       setPrevProfileUrl(data.profileUrl);
+      updateWidgetFirebase(data)
       setWidgetLoading(false);
     } catch (err) {
       console.error(err);
@@ -166,7 +159,13 @@ const WidgetDashboard = () => {
     }
   };
 
-  const registerInput = () => {
+  const updateWidgetFirebase = async (data) => {
+    await updateDoc(doc(firestoreDb, 'widgets', id), {
+      ...data      
+    })
+  }
+
+  const registerInput = (widget) => {
     register("filterRetweet");
     setValue("filterRetweet", widget.filterRetweet);
     register("filterReply");
@@ -207,7 +206,7 @@ const WidgetDashboard = () => {
       <Helmet>
         <title>Dashboard | Twevvy</title>
       </Helmet>
-      {loading ? (
+      {loading || !widgetForm ? (
         <div>Loading...</div>
       ) : (
         <>
@@ -266,7 +265,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Profile URL</p>
                           <input
                             type="text"
-                            defaultValue={widget.profileUrl}
+                            defaultValue={widgetForm.profileUrl}
                             {...register("profileUrl")}
                             placeholder="https://twitter.com/"
                             className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
@@ -276,7 +275,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Button Label</p>
                           <input
                             type="text"
-                            defaultValue={widget.buttonLabel}
+                            defaultValue={widgetForm.buttonLabel}
                             {...register("buttonLabel")}
                             placeholder="See What They Said"
                             className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
@@ -286,7 +285,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Show Tweet Count?</p>
                           <Controller
                             control={control}
-                            defaultValue={widget.showCount}
+                            defaultValue={widgetForm.showCount}
                             name="showCount"
                             key={11}
                             render={({ field: { onChange, value, ref } }) => (
@@ -308,7 +307,7 @@ const WidgetDashboard = () => {
                         <div className="text-sm">
                           <p className="font-medium">Tweet Amount</p>
                           <input
-                            defaultValue={widget.tweetAmount}
+                            defaultValue={widgetForm.tweetAmount}
                             type="number"
                             {...register("tweetAmount", { min: 10, max: 15 })}
                             placeholder="10-15"
@@ -321,7 +320,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Custom Tweet</p>
                           <div className="flex gap-2 mt-2">
                             <input
-                              defaultValue={widget.customTweet}
+                              defaultValue={widgetForm.customTweet}
                               type="text"
                               {...register("customTweet")}
                               placeholder="https://twitter.com/"
@@ -367,7 +366,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Include Retweet?</p>
                           <Controller
                             control={control}
-                            defaultValue={widget.filterRetweet}
+                            defaultValue={widgetForm.filterRetweet}
                             name="filterRetweet"
                             render={({ field: { onChange, value, ref } }) => (
                               <Select
@@ -388,7 +387,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Include Reply?</p>
                           <Controller
                             control={control}
-                            defaultValue={widget.filterReply}
+                            defaultValue={widgetForm.filterReply}
                             name="filterReply"
                             render={({ field: { onChange, value, ref } }) => (
                               <Select
@@ -409,7 +408,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Tweet Language</p>
                           <Controller
                             control={control}
-                            defaultValue={widget.tweetLang}
+                            defaultValue={widgetForm.tweetLang}
                             name="tweetLang"
                             render={({ field: { onChange, value, ref } }) => (
                               <Select
@@ -432,7 +431,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Match Our Good Words?</p>
                           <Controller
                             control={control}
-                            defaultValue={widget.matchGood}
+                            defaultValue={widgetForm.matchGood}
                             name="matchGood"
                             render={({ field: { onChange, value, ref } }) => (
                               <Select
@@ -453,7 +452,7 @@ const WidgetDashboard = () => {
                           <p className="font-medium">Filter Bad Word?</p>
                           <Controller
                             control={control}
-                            defaultValue={widget.banBad}
+                            defaultValue={widgetForm.banBad}
                             name="banBad"
                             render={({ field: { onChange, value, ref } }) => (
                               <Select
@@ -478,7 +477,7 @@ const WidgetDashboard = () => {
                             </span>
                           </p>
                           <input
-                            defaultValue={widget.matchSpecific}
+                            defaultValue={widgetForm.matchSpecific}
                             {...register("matchSpecific")}
                             type="text"
                             placeholder="Comma Separated Words"
@@ -493,7 +492,7 @@ const WidgetDashboard = () => {
                             </span>
                           </p>
                           <input
-                            defaultValue={widget.banSpecific}
+                            defaultValue={widgetForm.banSpecific}
                             {...register("banSpecific")}
                             type="text"
                             placeholder="Comma Separated Words"
