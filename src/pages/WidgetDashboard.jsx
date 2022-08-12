@@ -100,8 +100,10 @@ const WidgetDashboard = () => {
   };
 
   const submitHandler = (data) => {
-    getTwitterData(data).then(()=>{
-      updateWidgetFirebase(data)
+    getTwitterData(data).then((boolean)=>{
+      if(boolean){
+        updateWidgetFirebase(data)
+      }
     })
   };
 
@@ -128,8 +130,7 @@ const WidgetDashboard = () => {
         profile.data.response.errors &&
         profile.data.response.errors[0].title === "Not Found Error"
       ) {
-        console.log(profile.data.response.errors.resource_id);
-        throw new Error("Could not find");
+        throw new Error("Could not find data");
       }
       let structuredTweets = transformTweets(recent?.data);
       if (customTweet.length > 0) {
@@ -150,12 +151,13 @@ const WidgetDashboard = () => {
       setPrevProfileUrl(data.profileUrl);
       // updateWidgetFirebase(data);
       setWidgetLoading(false);
-      return
+      return(true)
     } catch (err) {
       console.error(err);
       toast.error("Could not find twitter username");
       setValue("profileUrl", prevProfileUrl);
       setWidgetLoading(false);
+      return(false)
     }
   };
 
