@@ -59,9 +59,7 @@ const WidgetDashboard = () => {
   const user = useRecoilValue(userState);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [customTweets, setCustomTweets] = useState([
-    "https://twitter.com/xavierofficials/status/1556895212030644224",
-  ]);
+  const [customTweets, setCustomTweets] = useState([]);
   const [widgetData, setWidgetData] = useState({});
   const [widgetLoading, setWidgetLoading] = useState(true);
   const [label, setLabel] = useState();
@@ -98,12 +96,13 @@ const WidgetDashboard = () => {
       navigate("/dashboard", { replace: true });
       return;
     }
-
     return docSnap;
   };
 
   const submitHandler = (data) => {
-    getTwitterData(data);
+    getTwitterData(data).then(()=>{
+      updateWidgetFirebase(data)
+    })
   };
 
   const getTwitterData = async (data) => {
@@ -149,8 +148,9 @@ const WidgetDashboard = () => {
         showCount: showCount,
       });
       setPrevProfileUrl(data.profileUrl);
-      updateWidgetFirebase(data)
+      // updateWidgetFirebase(data);
       setWidgetLoading(false);
+      return
     } catch (err) {
       console.error(err);
       toast.error("Could not find twitter username");
@@ -160,10 +160,10 @@ const WidgetDashboard = () => {
   };
 
   const updateWidgetFirebase = async (data) => {
-    await updateDoc(doc(firestoreDb, 'widgets', id), {
-      ...data      
-    })
-  }
+    await updateDoc(doc(firestoreDb, "widgets", id), {
+      ...data, customTweet: customTweets
+    });
+  };
 
   const registerInput = (widget) => {
     register("filterRetweet");
