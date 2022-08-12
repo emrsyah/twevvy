@@ -19,13 +19,13 @@ const Tweet = ({ d }) => {
           className="xl:w-11 xl:h-11 w-10 h-10 rounded-full"
         />
         <div className="flex flex-col">
-          <h5 className="font-semibold xl:text-base text-sm flex items-center gap-1">
+          <h5 className="font-semibold xl:text-base text-sm flex items-center gap-[2px]">
             <>
               {d.name}
               {d.verified && (
                 <Icon
                   icon="codicon:verified-filled"
-                  width={22}
+                  width={20}
                   className="text-sky-500"
                 />
               )}

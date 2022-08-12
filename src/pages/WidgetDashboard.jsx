@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "../atoms/userAtom";
 import { useNavigate } from "react-router-dom";
 import TriggerButton from "../components/TriggerButton";
@@ -22,8 +22,10 @@ import transformData from "../helpers/transformData";
 import transformTweets from "../helpers/transformTweets";
 import CopyCode from "../components/CopyCode";
 import { useParams } from "react-router";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { firestoreDb } from "../../firebase";
+import DeleteModal from "../components/DeleteModal";
+import { deleteAtomState } from "../atoms/deleteAtom";
 
 // const widget = {
 //   profileUrl: "https://twitter.com/producthunt",
@@ -65,6 +67,7 @@ const WidgetDashboard = () => {
   const [label, setLabel] = useState();
   const [prevProfileUrl, setPrevProfileUrl] = useState("");
   const [widgetForm, setWidgetForm] = useState();
+  const setDelete = useSetRecoilState(deleteAtomState);
 
   useEffect(() => {
     setLoading(true);
@@ -100,11 +103,11 @@ const WidgetDashboard = () => {
   };
 
   const submitHandler = (data) => {
-    getTwitterData(data).then((boolean)=>{
-      if(boolean){
-        updateWidgetFirebase(data)
+    getTwitterData(data).then((boolean) => {
+      if (boolean) {
+        updateWidgetFirebase(data);
       }
-    })
+    });
   };
 
   const getTwitterData = async (data) => {
@@ -151,19 +154,21 @@ const WidgetDashboard = () => {
       setPrevProfileUrl(data.profileUrl);
       // updateWidgetFirebase(data);
       setWidgetLoading(false);
-      return(true)
+      return true;
     } catch (err) {
       console.error(err);
       toast.error("Could not find twitter username");
       setValue("profileUrl", prevProfileUrl);
       setWidgetLoading(false);
-      return(false)
+      return false;
     }
   };
 
   const updateWidgetFirebase = async (data) => {
     await updateDoc(doc(firestoreDb, "widgets", id), {
-      ...data, customTweet: customTweets
+      ...data,
+      customTweet: customTweets,
+      updatedAt: serverTimestamp(),
     });
   };
 
@@ -194,12 +199,12 @@ const WidgetDashboard = () => {
       toast.error("URL is Invalid", { autoClose: 1500 });
       return;
     }
-    console.log(
-      "https://twitter.com/DailyDevTips1/status/1556963228344877058".match(
-        regExtract
-      )
-    );
-    setCustomTweets((twt) => [...twt, twtInput]);
+    // console.log(
+    //   "https://twitter.com/DailyDevTips1/status/1556963228344877058".match(
+    //     regExtract
+    //   )
+    // );
+    setCustomTweets((twt) => [twtInput, ...twt]);
     setValue("customTweet", "");
   };
 
@@ -213,6 +218,7 @@ const WidgetDashboard = () => {
       ) : (
         <>
           <Navbar />
+          <DeleteModal id={id} />
           <div className="containerKu my-8 2xl:px-20 xl:px-16 px-0">
             <CopyCode
               code={`
@@ -507,7 +513,7 @@ const WidgetDashboard = () => {
                   <div className="flex col-span-1 flex-col gap-2">
                     <div
                       onClick={() => setIsBasic(true)}
-                      className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
+                      className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 shadow font-medium ${
                         isBasic && "!text-sky-500"
                       }`}
                     >
@@ -520,7 +526,7 @@ const WidgetDashboard = () => {
                     </div>
                     <div
                       onClick={() => setIsBasic(false)}
-                      className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 pr-6 shadow font-medium ${
+                      className={`flex items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 shadow font-medium ${
                         !isBasic && "!text-sky-500"
                       }`}
                     >
@@ -530,6 +536,13 @@ const WidgetDashboard = () => {
                         width={20}
                       />
                       <p>Filter</p>
+                    </div>
+                    <div
+                      onClick={() => setDelete(true)}
+                      className={`flex hover:text-red-600 items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 shadow font-medium`}
+                    >
+                      <Icon icon="carbon:trash-can" width={20}/>
+                      <p className="col-span-11">Delete</p>
                     </div>
                   </div>
                 </div>
