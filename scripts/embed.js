@@ -25,7 +25,7 @@
   var containerButton = document.createElement("div")
   var containerButtonTrigger = document.createElement("button")
   containerButton.classList.add("himaker-trigger")
-  containerButton.append(constructIframe(url + "/widget/trigger"))
+  containerButton.append(constructIframe(url + "/widget/trigger/" + widgetId))
   containerButton.append(containerButtonTrigger)
   var containerCloseButton = document.createElement("button")
   containerCloseButton.innerHTML =

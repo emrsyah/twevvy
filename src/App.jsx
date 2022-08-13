@@ -61,7 +61,7 @@ function App() {
           </Routes>
         )}
         <Routes>
-          <Route path="/widget/trigger" element={<Trigger />} />
+          <Route path="/widget/trigger/:id" element={<Trigger />} />
           <Route path="/widget/panel/:id" element={<Panel />} />
         </Routes>
       </BrowserRouter>
