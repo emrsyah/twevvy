@@ -18,7 +18,7 @@ const WidgetComponent = ({
   return (
     <div className="col-span-1 shadowCard h-full w-full max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-y-auto overflow-x-hidden scroll">
       {loading ? (
-        <div className="font-medium text-slate-700">Getting Some Data👾...</div>
+        <div className="font-medium text-slate-600 text-center">Getting Some Data👾...</div>
       ) : (
         <>
           <a
