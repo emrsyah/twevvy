@@ -151,6 +151,8 @@ const WidgetDashboard = () => {
         tweets: structuredTweets,
         showCount: showCount,
       });
+      // console.log(structuredTweets)
+      // console.log(profile.data.response.data.profile_image_url)
       setPrevProfileUrl(data.profileUrl);
       // updateWidgetFirebase(data);
       setWidgetLoading(false);

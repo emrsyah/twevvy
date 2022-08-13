@@ -120,7 +120,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                       <p className="text-sm font-medium text-slate-700">
-                        {dayjs(widget?.data()?.updatedAt.toDate()).format(
+                        {dayjs(widget?.data()?.updatedAt?.toDate()).format(
                           "MMM DD"
                         )}
                       </p>

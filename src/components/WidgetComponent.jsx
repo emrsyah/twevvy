@@ -1,7 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import logo from "../assets/twevvyLogo.svg";
-import dateConverter from "../helpers/dateConverter";
 import thousandConverter from "../helpers/thousandConverter";
 import Tweet from "./Tweet";
 
@@ -17,9 +16,9 @@ const WidgetComponent = ({
 }) => {
   // console.log(image)
   return (
-    <div className="col-span-1 shadowCard max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-y-auto overflow-x-hidden scroll">
+    <div className="col-span-1 shadowCard h-full w-full max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-y-auto overflow-x-hidden scroll">
       {loading ? (
-        <div>Loading...</div>
+        <div className="font-medium text-slate-700">Getting Some Data👾...</div>
       ) : (
         <>
           <a

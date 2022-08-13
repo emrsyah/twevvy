@@ -8,10 +8,12 @@ import Home from "./pages/Home";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import Lottie from "lottie-web";
-import lottieJson from './assets/62424-gradient-loader-spinner-light-blue.json'
-import logo from './assets/twevvyNavLogo.svg'
+import lottieJson from "./assets/62424-gradient-loader-spinner-light-blue.json";
+import logo from "./assets/twevvyNavLogo.svg";
 import Dashboard from "./pages/Dashboard";
 import WidgetDashboard from "./pages/WidgetDashboard";
+import Trigger from "./pages/widget/Trigger";
+import Panel from "./pages/widget/Panel";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -58,6 +60,10 @@ function App() {
             <Route path="/dashboard/:id" element={<WidgetDashboard />} />
           </Routes>
         )}
+        <Routes>
+          <Route path="/widget/trigger" element={<Trigger />} />
+          <Route path="/widget/panel/:id" element={<Panel />} />
+        </Routes>
       </BrowserRouter>
     </>
   );

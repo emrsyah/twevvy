@@ -3,13 +3,13 @@ import { Icon } from "@iconify/react";
 
 const TriggerButton = ({label}) => {
   return (
-    <button className="py-3 w-full px-4 rounded shadowCard flex items-center gap-3">
+    <button className="py-3 px-4 overflow-hidden rounded shadowCard flex items-center gap-3">
       <Icon
         icon="ant-design:twitter-outlined"
-        width={25}
+        width={22}
         className="text-sky-500"
       />
-      <p className="font-semibold text-left">{label}</p>
+      <p className="font-semibold text-left text-sm truncate">{label}</p>
     </button>
   );
 };

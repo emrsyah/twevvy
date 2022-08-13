@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { Icon } from "@iconify/react";
 import { signInWithPopup } from "firebase/auth";
@@ -31,6 +31,12 @@ const Home = () => {
         <title>
           Twevvy | Share Your Product Twitter Community Easily In Any Website
         </title>
+        <script
+          src="http://localhost:3000/scripts/embed.js"
+          async
+          defer
+          data-widget-id="PE3YC8Ul6H4J1qNEB8aY"
+        ></script>
       </Helmet>
       <div className="relative overflow-hidden">
         <div className="relative z-[2]">
