@@ -1,5 +1,8 @@
 (function () {
-  var url = "http://localhost:3000";
+  const url =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://twevvy.vercel.app";
   var payload = document.querySelector("[data-widget-id]");
   //@ts-ignore
   var _a = payload.dataset,

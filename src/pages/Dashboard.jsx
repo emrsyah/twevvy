@@ -73,6 +73,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     try {
+      if (!user) navigate("/", { replace: true });
       getAllWidgets();
     } catch (err) {
       console.error(err);
