@@ -18,7 +18,9 @@ const WidgetComponent = ({
   return (
     <div className="col-span-1 shadowCard h-full w-full max-w-sm rounded-md px-3 pt-4 pb-2 max-h-[420px] overflow-y-auto overflow-x-hidden scroll">
       {loading ? (
-        <div className="font-medium text-slate-600 text-center">Getting Some Data👾...</div>
+        <div className="font-medium text-slate-600 text-center">
+          Getting Some Data👾...
+        </div>
       ) : (
         <>
           <a
@@ -54,9 +56,14 @@ const WidgetComponent = ({
             </button>
           </a>
           {showCount ? (
-            <a href={`https://twitter.com/intent/tweet?text=I love how amazing and cool @${username} is&hashtags=${username}`} target="_blank" className="bg-sky-500 cursor-pointer py-[6px] font-semibold inter my-2 lg:my-3 rounded text-white flex items-center justify-center">
+            <a
+              href={`https://twitter.com/intent/tweet?text=I love how amazing and cool @${username} is&hashtags=${username}`}
+              target="_blank"
+              className="bg-sky-500 cursor-pointer py-[6px] font-semibold inter my-2 lg:my-3 rounded text-white flex items-center justify-center"
+            >
               <p className="text-sm 2xl:text-[15px] text-center">
-                {thousandConverter(count)} Tweet about {username} <span className="xl:inline hidden">this week</span>
+                {thousandConverter(count)} Tweet about {username}{" "}
+                <span className="xl:inline hidden">this week</span>
               </p>
             </a>
           ) : (
@@ -73,14 +80,20 @@ const WidgetComponent = ({
               No Tweet😿
             </div>
           )}
-          <div className="flex justify-center text-sm gap-1 mt-4 mb-2">
+          <div className="flex justify-center text-[13.5px] gap-1 mt-4 mb-1">
             <p className="text-slate-700">
               Powered By{" "}
-              <span className="text-sky-500 cursor-pointer font-semibold">
+              <a
+                href="https://twevvy.vercel.app"
+                target="_blank"
+                className="text-sky-500 cursor-pointer font-semibold"
+              >
                 Twevvy
-              </span>
+              </a>
             </p>
-            <img src={logo} alt="logo" className="w-8 cursor-pointer" />
+            <a href="https://twevvy.vercel.app" target="_blank">
+              <img src={logo} alt="logo" className="w-8 cursor-pointer" />
+            </a>
           </div>
         </>
       )}
