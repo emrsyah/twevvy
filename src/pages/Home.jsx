@@ -92,7 +92,7 @@ const Home = () => {
                   Customize like you want
                 </h5>
                 <p className="text-slate-700 text-sm leading-relaxed">
-                  Display logo, add custom tweet, filter words, and many more.
+                  Add custom tweet, filter words, match words, and many more.
                 </p>
               </div>
               <div className="col-span-1 hover:shadow-2xl transition-all hover:rotate-6 hover:scale-105 shadow-md w-11/12 text-center rounded flex flex-col p-2">
