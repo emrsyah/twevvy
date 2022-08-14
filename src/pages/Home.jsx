@@ -46,7 +46,7 @@ const Home = () => {
         <div className="h-48 w-48 left-12 bg-indigo-700 absolute blur-[200px]"></div>
         <div className="h-52 w-52 bg-pink-500 right-12 top-0 absolute blur-[200px]"></div>
         <div className="containerKu mt-20 pb-12 relative z-10">
-          <img src={checkThis} alt="check" className="fixed right-24 bottom-20 w-28" />
+          <img src={checkThis} alt="check" className="fixed right-24 bottom-20 w-24" />
           {/* Hero */}
           <div className="flex flex-col items-center justify-center">
             <h1 className="lg:text-6xl !md:!text-5xl text-4xl inter !leading-[1.15] text-slate-900 text-center font-bold">

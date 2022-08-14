@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { userState } from "./atoms/userAtom";
@@ -18,8 +18,13 @@ import Panel from "./pages/widget/Panel";
 function App() {
   const [loading, setLoading] = useState(true);
   const setUser = useSetRecoilState(userState);
+  const location = useLocation()
 
   useEffect(() => {
+    if(location.pathname.includes("/widget/panel") || location.pathname.includes("/widget/trigger")){
+      setLoading(false)
+      return
+    }
     setLoading(true);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -37,6 +42,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if(location.pathname.includes("/widget/panel") || location.pathname.includes("/widget/trigger")) return
     const instance = Lottie.loadAnimation({
       container: document.querySelector("#lottie-container"),
       animationData: lottieJson,
@@ -47,7 +53,10 @@ function App() {
   return (
     <>
       <ToastContainer />
-      <BrowserRouter>
+        <Routes>
+          <Route path="/widget/trigger/:id" element={<Trigger />} />
+          <Route path="/widget/panel/:id" element={<Panel />} />
+        </Routes>
         {loading ? (
           <div className="flex gap-4 justify-center items-center h-[100vh] flex-col">
             <img src={logo} alt="" className="h-14" />
@@ -60,11 +69,6 @@ function App() {
             <Route path="/dashboard/:id" element={<WidgetDashboard />} />
           </Routes>
         )}
-        <Routes>
-          <Route path="/widget/trigger/:id" element={<Trigger />} />
-          <Route path="/widget/panel/:id" element={<Panel />} />
-        </Routes>
-      </BrowserRouter>
     </>
   );
 }
