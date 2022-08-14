@@ -55,7 +55,7 @@ const WidgetComponent = ({
               href={`https://twitter.com/intent/follow?screen_name=${username}`}
               target="_blank"
               rel="noreferrer"
-              className="bg-slate-800 mt-3 w-full rounded-md lg:mt-0 lg:w-fit text-white py-[6px] hover:bg-slate-900 px-4 lg:rounded-full font-semibold text-sm"
+              className="bg-slate-800 text-center mt-3 w-full rounded-md lg:mt-0 lg:w-fit text-white py-[6px] hover:bg-slate-900 px-4 lg:rounded-full font-semibold text-sm"
             >
               Follow
             </a>
