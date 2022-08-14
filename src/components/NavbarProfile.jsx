@@ -34,16 +34,16 @@ function NavbarProfile({ img }) {
         />
         {/* <div className="w-9 h-9 bg-sky-400 rounded-full"></div> */}
       </Menu.Button>
-      <Menu.Items className="absolute right-0 flex flex-col py-1 rounded bg-white gap-[2px] mt-1 w-36 shadow-lg font-medium">
+      <Menu.Items className="absolute right-0 flex sm:text-base text-sm flex-col py-1 rounded bg-white gap-[2px] mt-1 md:w-36 shadow-lg font-medium">
         <Menu.Item>
           {({ active }) => (
             <Link
-              className={` px-4 py-[6px] !z-20 items-center cursor-pointer flex gap-[10px] ${
+              className={` px-2 md:px-4  py-[6px] !z-20 items-center cursor-pointer flex gap-[10px] ${
                 active && "bg-gray-100"
               }`}
               to="/dashboard"
             >
-              <Icon icon="bx:home-alt-2" width="22" /> 
+              <Icon icon="bx:home-alt-2" width="18" /> 
               <p>Dashboard</p>
             </Link>
           )}
@@ -51,12 +51,12 @@ function NavbarProfile({ img }) {
         <Menu.Item>
           {({ active }) => (
             <button
-              className={` px-4 py-[6px] !z-20 items-center cursor-pointer flex gap-[10px]  ${
+              className={` px-2 md:px-4 py-[6px] !z-20 items-center cursor-pointer flex gap-[10px]  ${
                 active && "bg-gray-100 text-red-500"
               }`}
               onClick={logoutHandler}
             >
-              <Icon icon="carbon:logout" width="20" />
+              <Icon icon="carbon:logout" width="18" />
               <p className="font-medium">Logout</p>
             </button>
           )}
