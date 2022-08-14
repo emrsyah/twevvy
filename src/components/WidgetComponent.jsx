@@ -51,9 +51,14 @@ const WidgetComponent = ({
                 <p className="text-slate-600 font-medium">@{username}</p>
               </div>
             </div>
-            <button className="bg-slate-800 mt-3 w-full rounded-md lg:mt-0 lg:w-fit text-white py-[6px] hover:bg-slate-900 px-4 lg:rounded-full font-semibold text-sm">
+            <a
+              href={`https://twitter.com/intent/follow?screen_name=${username}`}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-slate-800 mt-3 w-full rounded-md lg:mt-0 lg:w-fit text-white py-[6px] hover:bg-slate-900 px-4 lg:rounded-full font-semibold text-sm"
+            >
               Follow
-            </button>
+            </a>
           </a>
           {showCount ? (
             <a
@@ -72,7 +77,7 @@ const WidgetComponent = ({
           {tweets?.length > 0 ? (
             <div className="flex flex-col gap-4 mt-5">
               {tweets.map((d) => (
-                <Tweet d={d} key={d.id} />
+                <Tweet d={d} id={d.id} key={d.id} />
               ))}
             </div>
           ) : (

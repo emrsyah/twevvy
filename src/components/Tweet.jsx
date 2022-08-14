@@ -4,7 +4,7 @@ import dateConverter from "../helpers/dateConverter";
 import thousandConverter from "../helpers/thousandConverter";
 import CustomRender from "./CustomRender";
 
-const Tweet = ({ d }) => {
+const Tweet = ({ d, id }) => {
   return (
     <a
       href={d.link}
@@ -41,11 +41,17 @@ const Tweet = ({ d }) => {
       <div className="flex items-center gap-3 text-sm text-gray-500 mt-[6px]">
         <p className=" inter  font-medium">{dateConverter(d?.date)}</p>
         <div className="flex items-center gap-1">
-          <Icon
-            icon="akar-icons:heart"
-            width="17"
-            className="cursor-pointer hover:text-rose-600"
-          />
+          <a
+            href={`https://twitter.com/intent/like?tweet_id=${id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Icon
+              icon="akar-icons:heart"
+              width="17"
+              className="cursor-pointer hover:text-rose-600"
+            />
+          </a>
           <p className="font-medium">{thousandConverter(d.like)}</p>
         </div>
       </div>
