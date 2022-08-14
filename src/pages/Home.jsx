@@ -33,8 +33,8 @@ const Home = () => {
           Twevvy | Share Your Product Twitter Community Easily In Any Website
         </title>
         <script
-          src="https://twevvy.vercel.app/scripts/embed.min.js"
-          // src="http://localhost:3000/scripts/embed.js"
+          // src="https://twevvy.vercel.app/scripts/embed.min.js"
+          src="http://localhost:3000/scripts/embed.js"
           async
           defer
           data-widget-id="PE3YC8Ul6H4J1qNEB8aY"
@@ -47,7 +47,7 @@ const Home = () => {
         <div className="h-48 w-48 left-12 bg-indigo-700 absolute blur-[200px]"></div>
         <div className="h-52 w-52 bg-pink-500 right-12 top-0 absolute blur-[200px]"></div>
         <div className="containerKu mt-20 pb-12 relative z-10">
-          <img src={checkThis} alt="check" className="fixed right-24 bottom-20 w-24 hidden md:inline" />
+          <img src={checkThis} alt="check" className="fixed right-24 bottom-20 w-24 hidden sm:inline" />
           {/* Hero */}
           <div className="flex flex-col items-center justify-center">
             <h1 className="lg:text-6xl sm:text-5xl text-3xl inter !leading-[1.15] text-slate-900 text-center font-bold">
