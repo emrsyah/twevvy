@@ -34,6 +34,7 @@ const Home = () => {
         </title>
         <script
           src="https://twevvy.vercel.app/scripts/embed.min.js"
+          // src="http://localhost:3000/scripts/embed.js"
           async
           defer
           data-widget-id="PE3YC8Ul6H4J1qNEB8aY"
@@ -46,19 +47,19 @@ const Home = () => {
         <div className="h-48 w-48 left-12 bg-indigo-700 absolute blur-[200px]"></div>
         <div className="h-52 w-52 bg-pink-500 right-12 top-0 absolute blur-[200px]"></div>
         <div className="containerKu mt-20 pb-12 relative z-10">
-          <img src={checkThis} alt="check" className="fixed right-24 bottom-20 w-24" />
+          <img src={checkThis} alt="check" className="fixed right-24 bottom-20 w-24 hidden md:inline" />
           {/* Hero */}
           <div className="flex flex-col items-center justify-center">
-            <h1 className="lg:text-6xl !md:!text-5xl text-4xl inter !leading-[1.15] text-slate-900 text-center font-bold">
+            <h1 className="lg:text-6xl !md:!text-5xl text-3xl inter !leading-[1.15] text-slate-900 text-center font-bold">
               Share Your Product Twitter Community Easily In Any Website
             </h1>
-            <p className="text-center font-medium text-slate-700 text-lg mt-4">
+            <p className="text-center font-medium text-slate-700 text-sm sm:text-lg mt-4">
               Twevvy is an embeddable widgets to share your twitter community
               review and stats easily
             </p>
             <button
               onClick={() => loginHandler()}
-              className="bg-slate-700 hover:bg-slate-800 text-white text-xl font-semibold py-3 px-8 rounded-md mt-14"
+              className="bg-slate-700 hover:bg-slate-800 text-white md:text-xl font-semibold py-3 px-8 rounded-md mt-14"
             >
               Get Started - It's Free 🤩
             </button>
@@ -66,15 +67,15 @@ const Home = () => {
 
           {/* Features */}
           <div className="flex flex-col items-center justify-center mt-40">
-            <h2 className="text-4xl leading-[1.2] text-slate-900 text-center font-bold inter">
+            <h2 className="md:text-4xl text-2xl leading-[1.2] text-slate-900 text-center font-bold inter">
               Let They Know
               <br />
               What The Community Said
             </h2>
-            <p className="text-lg text-center font-medium text-slate-700 mt-2">
+            <p className="md:text-lg text-sm text-center font-medium text-slate-700 mt-2">
               People wont take word from you, they need a real reviews
             </p>
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-center gap-4 mt-6 px-10">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-center gap-4 mt-6 md:px-10">
               <div className="col-span-1 hover:shadow-2xl transition-all hover:-rotate-6 hover:scale-105 shadow-md w-11/12 text-center rounded flex flex-col p-2">
                 <div className="bg-gradient-to-br from-sky-400  to-sky-300 flex items-center justify-center p-6 rounded text-white">
                   <Icon icon="ant-design:field-time-outlined" width={80} />
@@ -113,7 +114,7 @@ const Home = () => {
           </div>
 
           {/* Footer */}
-          <footer className="flex items-center mt-24 gap-3 justify-center font-medium">
+          <footer className="flex md:flex-row flex-col items-center mt-24 gap-3 justify-center font-medium">
             <p className="text-slate-800">
               Built with 💖 by{" "}
               <a
@@ -124,7 +125,7 @@ const Home = () => {
                 emrsyah
               </a>
             </p>
-            <p className="text-slate-700">|</p>
+            <p className="text-slate-700 hidden md:inline">|</p>
             <div className="flex items-center gap-3">
               <a
                 href="https://twitter.com/emrsyahh"

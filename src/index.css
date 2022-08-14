@@ -18,7 +18,7 @@
 
 @layer components {
   .containerKu {
-    @apply max-w-7xl 2xl:mx-auto xl:mx-24 lg:mx-16 mx-8;
+    @apply max-w-7xl 2xl:mx-auto xl:mx-24 lg:mx-16 md:mx-8 mx-4;
   }
 }
 
