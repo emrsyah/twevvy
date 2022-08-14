@@ -88,16 +88,16 @@ const Dashboard = () => {
       <Navbar />
       <div className="containerKu my-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Manage Your Twevvy</h1>
+          <h1 className="text-lg sm:text-xl font-semibold">Manage Your Twevvy</h1>
           <button
             onClick={() => addWidgetHandler()}
-            className="flex items-center gap-2 py-2 px-3 rounded bg-sky-500 text-white font-semibold"
+            className="flex text-sm sm:text-base items-center gap-2 py-2 px-3 rounded bg-sky-500 text-white font-semibold"
           >
             Add Widget
             <Icon icon="akar-icons:plus" width={18} />
           </button>
         </div>
-        <div className="mt-6 grid grid-cols-2 gap-6">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
           {loading ? (
             <div>Getting your widgets...</div>
           ) : (

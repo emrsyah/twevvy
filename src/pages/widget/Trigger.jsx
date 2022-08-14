@@ -29,7 +29,7 @@ const Trigger = () => {
     }
   }, [])
 
-  return <TriggerButton label={label || "Getting Data"} />;
+  return <TriggerButton label={label || "Getting Data..."} />;
 };
 
 export default Trigger;
