@@ -33,8 +33,8 @@ const Home = () => {
           Twevvy | Share Your Product Twitter Community Easily In Any Website
         </title>
         <script
-          // src="https://twevvy.vercel.app/scripts/embed.min.js"
-          src="http://localhost:3000/scripts/embed.js"
+          src="https://twevvy.vercel.app/scripts/embed.min.js"
+          // src="http://localhost:3000/scripts/embed.js"
           async
           defer
           data-widget-id="PE3YC8Ul6H4J1qNEB8aY"
