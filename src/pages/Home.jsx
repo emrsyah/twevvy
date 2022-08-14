@@ -50,7 +50,7 @@ const Home = () => {
           <img src={checkThis} alt="check" className="fixed right-24 bottom-20 w-24 hidden md:inline" />
           {/* Hero */}
           <div className="flex flex-col items-center justify-center">
-            <h1 className="lg:text-6xl !md:!text-5xl text-3xl inter !leading-[1.15] text-slate-900 text-center font-bold">
+            <h1 className="lg:text-6xl !sm:text-[54px] text-3xl inter !leading-[1.15] text-slate-900 text-center font-bold">
               Share Your Product Twitter Community Easily In Any Website
             </h1>
             <p className="text-center font-medium text-slate-700 text-sm sm:text-lg mt-4">
