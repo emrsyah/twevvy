@@ -541,7 +541,7 @@ const WidgetDashboard = () => {
                     </div>
                     <div
                       onClick={() => setDelete(true)}
-                      className={`flex hover:text-red-600 items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 shadow font-medium`}
+                      className={`flex hover:text-red-600 hover:bg-red-50 items-center gap-2 cursor-pointer text-slate-600 rounded py-1 pl-3 shadow font-medium`}
                     >
                       <Icon icon="carbon:trash-can" width={20}/>
                       <p className="col-span-11">Delete</p>
