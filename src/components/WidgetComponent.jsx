@@ -27,7 +27,7 @@ const WidgetComponent = ({
             href={`https://twitter.com/${username}`}
             target="_blank"
             rel="noreferrer"
-            className="flex lg:flex-row flex-col justify-between lg:items-center"
+            className="flex flex-col justify-between"
           >
             <div className="flex cursor-pointer items-center gap-4">
               <div className="w-14 h-14 rounded-full relative">
@@ -55,7 +55,7 @@ const WidgetComponent = ({
               href={`https://twitter.com/intent/follow?screen_name=${username}`}
               target="_blank"
               rel="noreferrer"
-              className="bg-slate-800 text-center mt-3 w-full rounded-md lg:mt-0 lg:w-fit text-white py-[6px] hover:bg-slate-900 px-4 lg:rounded-full font-semibold text-sm"
+              className="bg-slate-800 text-center mt-3 w-full rounded-md  text-white py-[6px] hover:bg-slate-900 px-4 font-semibold text-sm"
             >
               Follow
             </a>
@@ -64,7 +64,7 @@ const WidgetComponent = ({
             <a
               href={`https://twitter.com/intent/tweet?text=I love how amazing and cool @${username} is&hashtags=${username}`}
               target="_blank"
-              className="bg-sky-500 cursor-pointer py-[6px] font-semibold inter my-2 lg:my-3 rounded text-white flex items-center justify-center"
+              className="bg-sky-500 cursor-pointer py-[6px] font-semibold inter my-2 rounded text-white flex items-center justify-center"
             >
               <p className="text-sm 2xl:text-[15px] text-center">
                 {thousandConverter(count)} Tweet about {username}{" "}

@@ -232,7 +232,7 @@ const WidgetDashboard = () => {
 ></script>`}
             />
             <div className=" grid grid-cols-5 xl:gap-8 gap-6">
-              <div className="flex col-span-2 flex-col gap-3">
+              <div className="flex col-span-2 flex-col gap-3 items-end">
                 <TriggerButton label={label} />
                 <WidgetComponent
                   // image="https://lh3.googleusercontent.com/a-/AFdZucp6A_VoFj4qsbHbmCdBHi7Oy2klN3JIiWVEiAs20mc=s96-c"

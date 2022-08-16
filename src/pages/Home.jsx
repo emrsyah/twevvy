@@ -73,7 +73,7 @@ const Home = () => {
               What The Community Said
             </h2>
             <p className="md:text-lg text-sm text-center font-medium text-slate-700 mt-2">
-              People wont take word from you, they need a real reviews
+              People wont take word from you, they need honest reviews
             </p>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 items-center gap-4 mt-6 md:px-10">
               <div className="col-span-1 hover:shadow-2xl transition-all hover:-rotate-6 hover:scale-105 shadow-md w-11/12 text-center rounded flex flex-col p-2">
