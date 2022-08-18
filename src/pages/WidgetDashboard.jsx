@@ -319,10 +319,10 @@ const WidgetDashboard = () => {
                           <input
                             defaultValue={widgetForm.tweetAmount}
                             type="number"
-                            {...register("tweetAmount", { min: 10, max: 15 })}
-                            placeholder="10-15"
+                            {...register("tweetAmount", { min: 10, max: 20 })}
+                            placeholder="10-20"
                             min={10}
-                            max={15}
+                            max={20}
                             className="outline-none p-2 rounded-sm mt-1 w-full bg-slate-50 border-[1px] border-gray-300"
                           />
                         </div>
